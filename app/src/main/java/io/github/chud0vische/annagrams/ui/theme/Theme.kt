@@ -14,7 +14,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun WordsTheme(
+fun AnnagramsTheme(
 
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
