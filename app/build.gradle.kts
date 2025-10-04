@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.words"
+    namespace = "io.github.chud0vische.annagrams"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.words"
+        applicationId = "io.github.chud0vische.annagrams"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

@@ -1,4 +1,4 @@
-package com.example.words.ui.theme
+package io.github.chud0vische.annagrams.ui.theme
 
 import android.os.Build
 import androidx.compose.material3.MaterialTheme
