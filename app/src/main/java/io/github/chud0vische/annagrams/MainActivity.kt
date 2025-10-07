@@ -42,6 +42,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import io.github.chud0vische.annagrams.ui.theme.Dimen
+import io.github.chud0vische.annagrams.ui.theme.*
 
 // TODO: полностью переработать...
 class MainActivity : ComponentActivity() {
@@ -54,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     // TODO: Вынести все значения цветов и размеров из MainActivity
-                    color = Color(0xFF121212)
+                    color = AppBackgroundColor
                 ) {
                     GameScreen(viewModel = gameViewModel)
                 }
@@ -74,7 +78,7 @@ fun GameScreen(viewModel: GameViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(Dimen.screenPadding),
         contentAlignment = Alignment.Center
     ) {
         FoundWordsList(
@@ -82,28 +86,28 @@ fun GameScreen(viewModel: GameViewModel) {
             foundWords = foundWords,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = 100.dp)
+                .padding(top = Dimen.foundWordsListTopPadding)
         )
 
         Text(
             text = currentWord,
-            fontSize = 32.sp,
+            fontSize = Dimen.mediumFont,
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(top = 100.dp)
+                .padding(top = Dimen.currentWordTopPadding)
         )
 
         if (isLevelCompleted) {
             Text(
                 text = "Level Completed!",
-                fontSize = 32.sp,
+                fontSize = Dimen.largeFont,
                 fontWeight = FontWeight.Bold,
-                color = Color.Green,
+                color = FoundWordColor,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(top = 100.dp)
+                    .padding(top = Dimen.currentWordTopPadding)
             )
         }
 
@@ -123,7 +127,7 @@ fun GameScreen(viewModel: GameViewModel) {
 
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 100.dp)
+                .padding(bottom = Dimen.keyboardBottomPadding)
         )
     }
 }
@@ -135,9 +139,8 @@ fun LetterKeyboard(
     onLetterSelected: (Char) -> Unit,
     onShuffleClick: () -> Unit,
     modifier: Modifier = Modifier,
-    // TODO: Вынести все значения из LetterKeyboard
-    distanceBetweenLetters: Int = 100,
-    keyBoardSize: Int = 250
+    distanceBetweenLetters: Int = Dimen.distanceBetweenLetters,
+    keyBoardSize: Dp = Dimen.keyboardSize
 ) {
     val letterPositions = remember(letters) { mutableStateMapOf<Int, Rect>() }
     val selectedButtonIndices  = remember { mutableStateListOf<Int>() }
@@ -147,7 +150,7 @@ fun LetterKeyboard(
 
     Box(
         modifier = modifier
-            .size(keyBoardSize.dp)
+            .size(keyBoardSize)
             // TODO: вынести в отдельную функцию
             .pointerInput(letters) {
                 detectDragGestures(
@@ -204,7 +207,7 @@ fun LetterKeyboard(
                         color = Color.White,
                         start = points[i],
                         end = points[i+1],
-                        strokeWidth = 10f,
+                        strokeWidth = Dimen.lineStrokeWidth,
                         cap = StrokeCap.Round
                     )
                 }
@@ -261,9 +264,9 @@ fun FoundWordsList(
 
             Text(
                 text = textToShow,
-                fontSize = 28.sp,
+                fontSize = Dimen.mediumFont,
                 fontWeight = FontWeight.Bold,
-                color = if (isFound) Color.Green else Color.Gray,
+                color = if (isFound) FoundWordColor else PlaceholderColor,
                 letterSpacing = if (isFound) 1.sp else 4.sp
             )
         }
@@ -274,12 +277,12 @@ fun FoundWordsList(
 fun LetterButton(
     letter: Char,
     modifier: Modifier = Modifier,
-    buttonSize: Int = 60,
-    fontSize: Int = 28
+    buttonSize: Dp = Dimen.letterButtonSize,
+    fontSize: TextUnit = Dimen.largeFont
 ) {
     Box(
         modifier = modifier
-            .size(buttonSize.dp)
+            .size(buttonSize)
             .clip(CircleShape)
             .background(Color.DarkGray.copy(alpha = 0.5F)),
         contentAlignment = Alignment.Center
@@ -287,7 +290,7 @@ fun LetterButton(
         Text(
             text = letter.toString(),
             color = Color.White,
-            fontSize = fontSize.sp,
+            fontSize = fontSize,
             fontWeight = FontWeight.Bold
         )
     }
@@ -300,7 +303,7 @@ fun ShuffleButton(
 ) {
     Box(
         modifier
-            .size(100.dp)
+            .size(Dimen.shuffleButtonSize)
             .clip(CircleShape)
             .background(Color.DarkGray.copy(alpha = 0.5F))
             .clickable { onShuffleClick() },
@@ -309,7 +312,7 @@ fun ShuffleButton(
         Text(
             text = "\uD83D\uDD04",
             color = Color.White,
-            fontSize = 28.sp,
+            fontSize = Dimen.mediumFont,
             fontWeight = FontWeight.Bold
         )
     }
@@ -324,8 +327,8 @@ fun GameActions(
 ) {
     Box(
         modifier = modifier
-            .padding(16.dp)
-            .size(width = 150.dp, height = 50.dp)
+            .padding(Dimen.screenPadding)
+            .size(width = Dimen.actionButtonWidth, height = Dimen.actionButtonHeight)
             .clip(CircleShape)
             .background(if (isLevelCompleted) Color.Green else Color.Red)
             .clickable {
@@ -336,7 +339,7 @@ fun GameActions(
         Text(
             text = if (isLevelCompleted) "Next" else "Restart",
             color = Color.White,
-            fontSize = 20.sp,
+            fontSize = Dimen.smallFont,
             fontWeight = FontWeight.Bold
         )
     }
