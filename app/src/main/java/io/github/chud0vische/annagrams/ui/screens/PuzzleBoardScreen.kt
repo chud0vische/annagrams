@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.GameViewModel
 import io.github.chud0vische.annagrams.data.LayoutStrategy
 import io.github.chud0vische.annagrams.ui.composables.LevelControlButton
@@ -49,7 +50,7 @@ fun PuzzleBoardScreen(viewModel: GameViewModel) {
             color = Color.White,
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(top = Dimen.inputWordTopPadding)
+                .padding(top = Dimen.inputWordTopPadding, bottom = 120.dp)
         )
 
         if (isLevelCompleted) {

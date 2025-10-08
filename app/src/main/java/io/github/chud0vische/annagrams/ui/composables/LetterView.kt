@@ -14,11 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.chud0vische.annagrams.ui.theme.Dimen
 
 @Composable
 fun LetterView(letter: Char?, modifier: Modifier = Modifier) {
-    val boxSize = 32.dp
-    val cornerRadius = 4.dp
+    val boxSize = Dimen.letterBoxSize
+    val cornerRadius = Dimen.letterBoxCornerRadius
 
     val backgroundColor = if (letter != null) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
     val borderColor = if (letter != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
@@ -28,14 +29,14 @@ fun LetterView(letter: Char?, modifier: Modifier = Modifier) {
         modifier = modifier
             .size(boxSize)
             .background(backgroundColor, RoundedCornerShape(cornerRadius))
-            .border(2.dp, borderColor, RoundedCornerShape(cornerRadius)),
+            .border(Dimen.letterBoxStrokeWidth, borderColor, RoundedCornerShape(cornerRadius)),
         contentAlignment = Alignment.Center
     ) {
         if (letter != null) {
             Text(
                 text = letter.toString().uppercase(),
                 color = textColor,
-                fontSize = 18.sp,
+                fontSize = Dimen.letterBoxFontSize,
                 fontWeight = FontWeight.Bold
             )
         }

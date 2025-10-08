@@ -24,15 +24,15 @@ fun ShuffleButton(
         modifier = modifier
             .size(Dimen.shuffleButtonSize)
             .clip(CircleShape)
-            .background(Color.DarkGray.copy(alpha = 0.3f)) // Можно вынести в Color.kt
+            .background(Color.DarkGray.copy(alpha = 0.3f))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = Icons.Default.Refresh,
-            contentDescription = "Shuffle letters", // Описание для доступности
-            tint = Color.White,
-            modifier = Modifier.size(Dimen.letterButtonSize) // Используем размер поменьше
+            contentDescription = "Shuffle letters",
+            tint = Color.White.copy(alpha = 0.3f),
+            modifier = Modifier.size(Dimen.shuffleButtonSize / 2)
         )
     }
 }
