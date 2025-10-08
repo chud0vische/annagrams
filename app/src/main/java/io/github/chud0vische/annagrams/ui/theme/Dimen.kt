@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.sp
 object Dimen {
     val screenPadding = 16.dp
     val foundWordsListTopPadding = 100.dp
-    val currentWordTopPadding = 100.dp
+    val inputWordTopPadding = 100.dp
     val keyboardBottomPadding = 100.dp
 
     val largeFont = 32.sp
