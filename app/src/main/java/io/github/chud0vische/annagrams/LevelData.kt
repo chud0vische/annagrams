@@ -20,7 +20,7 @@ object LevelRepository {
         ),
         Level(
             id = 2,
-            letters = "КРОХА".toList(), // Укроп
+            letters = "КРОХА".toList(),
             validWords = setOf("КОРА", "КРОХА", "КРАХ", "ОХРА", "РОК")
         ),
     )
