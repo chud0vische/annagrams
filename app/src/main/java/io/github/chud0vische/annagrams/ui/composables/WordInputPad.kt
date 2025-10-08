@@ -32,7 +32,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun WordComposer(
+fun WordInputPad(
     letters: List<Char>,
     onWordCollect: (String) -> Unit,
     onLetterSelected: (Char) -> Unit,
@@ -124,7 +124,7 @@ fun WordComposer(
             val offsetX = (cos(angle + rotationAngle) * distanceBetweenLetters).dp
             val offsetY = (sin(angle + rotationAngle) * distanceBetweenLetters).dp
 
-            LetterNode(
+            InputLetterButton(
                 letter = letter,
                 modifier = Modifier
                     .offset(x = offsetX, y = offsetY)

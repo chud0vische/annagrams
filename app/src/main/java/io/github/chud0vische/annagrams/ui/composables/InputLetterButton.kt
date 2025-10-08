@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.TextUnit
 import io.github.chud0vische.annagrams.ui.theme.Dimen
 
 @Composable
-fun LetterNode(
+fun InputLetterButton(
     letter: Char,
     modifier: Modifier = Modifier,
     buttonSize: Dp = Dimen.letterButtonSize,

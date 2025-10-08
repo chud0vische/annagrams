@@ -10,9 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import io.github.chud0vische.annagrams.GameViewModel
-import io.github.chud0vische.annagrams.ui.composables.FoundWordsGrid
-import io.github.chud0vische.annagrams.ui.composables.LevelControlActions
-import io.github.chud0vische.annagrams.ui.composables.WordComposer
+import io.github.chud0vische.annagrams.data.LayoutStrategy
+import io.github.chud0vische.annagrams.ui.composables.LevelControlButton
+import io.github.chud0vische.annagrams.ui.composables.WordInputPad
+import io.github.chud0vische.annagrams.ui.composables.WordGrid
 import io.github.chud0vische.annagrams.ui.theme.Dimen
 import io.github.chud0vische.annagrams.ui.theme.FoundWordColor
 
@@ -20,8 +21,11 @@ import io.github.chud0vische.annagrams.ui.theme.FoundWordColor
 fun PuzzleBoardScreen(viewModel: GameViewModel) {
     val inputWord = viewModel.typedWord
     val foundWords = viewModel.foundWords
-    val allWords = viewModel.validWords
+    val words = viewModel.validWords
     val isLevelCompleted = viewModel.isLevelCompleted
+
+    // TODO: Переключатель стратегий
+    val currentStrategy = LayoutStrategy.ListLayout
 
     Box(
         modifier = Modifier
@@ -29,9 +33,10 @@ fun PuzzleBoardScreen(viewModel: GameViewModel) {
             .padding(Dimen.screenPadding),
         contentAlignment = Alignment.Center
     ) {
-        FoundWordsGrid(
-            allWords = allWords,
+        WordGrid(
+            words = words, // Имя параметра `allWords` изменилось на `words`
             foundWords = foundWords,
+            strategy = currentStrategy, // Передаем нашу новую стратегию
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = Dimen.foundWordsListTopPadding)
@@ -59,7 +64,7 @@ fun PuzzleBoardScreen(viewModel: GameViewModel) {
             )
         }
 
-        LevelControlActions(
+        LevelControlButton(
             isLevelCompleted = isLevelCompleted,
             onRestartClick = { viewModel.restartLevel() },
             onNextLevelClick = { viewModel.nextLevel() },
@@ -67,7 +72,7 @@ fun PuzzleBoardScreen(viewModel: GameViewModel) {
                 .align(Alignment.BottomEnd)
         )
 
-        WordComposer(
+        WordInputPad(
             letters = viewModel.levelLetters,
             onWordCollect = { word -> viewModel.onWordCollected(word) },
             onLetterSelected = { letter -> viewModel.onLetterSelected(letter)},

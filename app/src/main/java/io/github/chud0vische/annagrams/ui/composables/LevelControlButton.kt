@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import io.github.chud0vische.annagrams.ui.theme.Dimen
 
 @Composable
-fun LevelControlActions(
+fun LevelControlButton(
     isLevelCompleted: Boolean,
     onRestartClick: () -> Unit,
     onNextLevelClick: () -> Unit,
