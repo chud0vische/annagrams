@@ -1,4 +1,4 @@
-package io.github.chud0vische.annagrams
+package io.github.chud0vische.annagrams.data
 
 data class GridChar(
     val char: Char,
