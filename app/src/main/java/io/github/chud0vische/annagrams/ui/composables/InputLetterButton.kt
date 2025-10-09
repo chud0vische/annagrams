@@ -30,7 +30,7 @@ fun InputLetterButton(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = letter.toString(),
+            text = letter.toString().uppercase(),
             color = Color.White,
             fontSize = fontSize,
             fontWeight = FontWeight.Bold

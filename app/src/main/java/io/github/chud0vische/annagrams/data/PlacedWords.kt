@@ -1,7 +1,5 @@
 package io.github.chud0vische.annagrams.data
 
-import io.github.chud0vische.annagrams.GridChar
-
 enum class WordDirection {
     HORIZONTAL,
     VERTICAL

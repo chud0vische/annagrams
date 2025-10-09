@@ -1,87 +1,118 @@
 package io.github.chud0vische.annagrams.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.github.chud0vische.annagrams.GameViewModel
-import io.github.chud0vische.annagrams.data.LayoutStrategy
+import io.github.chud0vische.annagrams.ui.game.GameViewModel
 import io.github.chud0vische.annagrams.ui.composables.LevelControlButton
 import io.github.chud0vische.annagrams.ui.composables.WordInputPad
 import io.github.chud0vische.annagrams.ui.composables.WordGrid
 import io.github.chud0vische.annagrams.ui.theme.Dimen
 import io.github.chud0vische.annagrams.ui.theme.FoundWordColor
 
+
 @Composable
 fun PuzzleBoardScreen(viewModel: GameViewModel) {
-    val inputWord = viewModel.typedWord
-    val foundWords = viewModel.foundWords
-    val words = viewModel.validWords
-    val isLevelCompleted = viewModel.isLevelCompleted
-
-    // TODO: Переключатель стратегий
-    val currentStrategy = LayoutStrategy.ListLayout
+    val uiState by viewModel.uiState.collectAsState()
+    var typedWord by remember { mutableStateOf("") }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(Dimen.screenPadding),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        WordGrid(
-            words = words, // Имя параметра `allWords` изменилось на `words`
-            foundWords = foundWords,
-            strategy = currentStrategy, // Передаем нашу новую стратегию
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = Dimen.foundWordsListTopPadding)
-        )
-
-        Text(
-            text = inputWord,
-            fontSize = Dimen.mediumFont,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(top = Dimen.inputWordTopPadding, bottom = 120.dp)
-        )
-
-        if (isLevelCompleted) {
-            Text(
-                text = "Level Completed!",
-                fontSize = Dimen.largeFont,
-                fontWeight = FontWeight.Bold,
-                color = FoundWordColor,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = Dimen.inputWordTopPadding)
-            )
+        if (uiState.isLoading) {
+            // Если мы все еще загружаемся И список слов пуст, значит, это первая загрузка
+            if (uiState.crosswordWords.isEmpty()) {
+                CircularProgressIndicator()
+            }
+            // Если загрузка идет, но слова уже есть (смена уровня), мы ничего не прячем
         }
 
-        LevelControlButton(
-            isLevelCompleted = isLevelCompleted,
-            onRestartClick = { viewModel.restartLevel() },
-            onNextLevelClick = { viewModel.nextLevel() },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-        )
+        if (!uiState.isLoading && uiState.crosswordWords.isEmpty()) {
+            Text(
+                "Не удалось сгенерировать уровень.\nПроверьте базу данных.",
+                color = Color.Red,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        else if (uiState.crosswordWords.isNotEmpty()) {
+            // ИСПОЛЬЗУЕМ COLUMN ДЛЯ ВЕРТИКАЛЬНОГО РАСПРЕДЕЛЕНИЯ
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(Dimen.screenPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween // Распределяет пространство
+            ) {
+                // --- Верхняя часть (сетка слов) ---
+                WordGrid(
+                    placedWords = uiState.crosswordWords,
+                    foundWords = uiState.foundWords,
+                    modifier = Modifier
+                        .weight(1f) // <--- ВАЖНО: Занимает все доступное место
+                        .padding(top = Dimen.foundWordsListTopPadding)
+                )
 
-        WordInputPad(
-            letters = viewModel.levelLetters,
-            onWordCollect = { word -> viewModel.onWordCollected(word) },
-            onLetterSelected = { letter -> viewModel.onLetterSelected(letter)},
-            onShuffleClick = { viewModel.shuffleLetters() },
+                // --- Центральная часть (вводимое слово) ---
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                ) {
+                    Text(
+                        text = typedWord.ifEmpty { " " }, // Показываем пробел, чтобы не схлопывалось
+                        fontSize = Dimen.mediumFont,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
 
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = Dimen.keyboardBottomPadding)
-        )
+                    if (uiState.isLevelCompleted) {
+                        Text(
+                            text = "Level Completed!",
+                            fontSize = Dimen.largeFont,
+                            fontWeight = FontWeight.Bold,
+                            color = FoundWordColor
+                        )
+                    }
+                }
+
+
+                // --- Нижняя часть (клавиатура) ---
+                WordInputPad(
+                    letters = uiState.letters,
+                    onWordCollect = { word ->
+                        viewModel.submitWord(word)
+                        typedWord = ""
+                    },
+                    onLetterSelected = { letter -> typedWord += letter },
+                    onShuffleClick = { /* TODO */ },
+                    modifier = Modifier.padding(bottom = Dimen.keyboardBottomPadding)
+                )
+            }
+
+            // Кнопки управления уровнем остаются в Box, чтобы быть поверх всего
+            LevelControlButton(
+                isLevelCompleted = uiState.isLevelCompleted,
+                onRestartClick = { /* TODO */ },
+                onNextLevelClick = { viewModel.loadLevel() },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(Dimen.screenPadding) // Добавим отступы
+            )
+        }
     }
 }
