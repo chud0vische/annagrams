@@ -1,10 +1,9 @@
-package io.github.chud0vische.annagrams.ui.game
+package io.github.chud0vische.annagrams.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.chud0vische.annagrams.data.Level
-import io.github.chud0vische.annagrams.data.LevelRepository
-import io.github.chud0vische.annagrams.data.PlacedWord
+import io.github.chud0vische.annagrams.data.repository.LevelRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -13,10 +12,10 @@ import kotlinx.coroutines.launch
 data class GameUiState(
     val levelNumber: Int = 1,
     val letters: List<Char> = emptyList(),
-    val crosswordWords: List<PlacedWord> = emptyList(),
-    val bonusWordsPool: Set<String> = emptySet(),
-    val foundWords: Set<String> = emptySet(),
-    val foundBonusWords: Set<String> = emptySet(),
+    val crosswordWords: List<CrosswordWord> = emptyList(),
+    val bonusWordsPool: Set<List<Char>> = emptySet(),
+    val foundWords: Set<List<Char>> = emptySet(),
+    val foundBonusWords: Set<List<Char>> = emptySet(),
     val isLevelCompleted: Boolean = false,
     val isLoading: Boolean = true
 )

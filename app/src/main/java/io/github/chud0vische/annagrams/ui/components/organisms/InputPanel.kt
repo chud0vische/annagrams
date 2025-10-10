@@ -1,4 +1,4 @@
-package io.github.chud0vische.annagrams.ui.composables
+package io.github.chud0vische.annagrams.ui.components.organisms
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -24,7 +24,9 @@ import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.chud0vische.annagrams.ui.theme.Dimen
+import io.github.chud0vische.annagrams.ui.components.atoms.InputButton
+import io.github.chud0vische.annagrams.ui.components.atoms.ShuffleButton
+import io.github.chud0vische.annagrams.ui.theme.Dimensions
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -32,14 +34,14 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun WordInputPad(
+fun InputPanel(
     letters: List<Char>,
     onWordCollect: (String) -> Unit,
     onLetterSelected: (Char) -> Unit,
     onShuffleClick: () -> Unit,
     modifier: Modifier = Modifier,
-    distanceBetweenLetters: Int = Dimen.distanceBetweenLetters,
-    keyBoardSize: Dp = Dimen.keyboardSize
+    distanceBetweenLetters: Int = Dimensions.distanceBetweenLetters,
+    keyBoardSize: Dp = Dimensions.keyboardSize
 ) {
     val letterPositions = remember(letters) { mutableStateMapOf<Int, Rect>() }
     val selectedButtonIndices  = remember { mutableStateListOf<Int>() }
@@ -105,7 +107,7 @@ fun WordInputPad(
                         color = Color.White,
                         start = points[i],
                         end = points[i+1],
-                        strokeWidth = Dimen.lineStrokeWidth,
+                        strokeWidth = Dimensions.lineStrokeWidth,
                         cap = StrokeCap.Round
                     )
                 }
@@ -124,7 +126,7 @@ fun WordInputPad(
             val offsetX = (cos(angle + rotationAngle) * distanceBetweenLetters).dp
             val offsetY = (sin(angle + rotationAngle) * distanceBetweenLetters).dp
 
-            InputLetterButton(
+            InputButton(
                 letter = letter,
                 modifier = Modifier
                     .offset(x = offsetX, y = offsetY)

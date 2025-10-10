@@ -15,7 +15,6 @@ private val DarkColorScheme = darkColorScheme(
 
 @Composable
 fun AnnagramsTheme(
-
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {

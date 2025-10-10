@@ -1,4 +1,4 @@
-package io.github.chud0vische.annagrams.ui.composables
+package io.github.chud0vische.annagrams.ui.components.organisms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.chud0vische.annagrams.data.PlacedWord
+import io.github.chud0vische.annagrams.ui.components.molecules.WordView
 
 @Composable
 fun WordGrid(
-    placedWords: List<PlacedWord>,
+    placedWords: List<CrosswordWord>,
     foundWords: Set<String>,
     modifier: Modifier = Modifier
 ) {
@@ -27,7 +27,7 @@ fun WordGrid(
 
             WordView(
                 word = placedWord.text,
-                isFound = placedWord.text in foundWords
+                isFound = placedWord.text in foundWords,
             )
         }
     }

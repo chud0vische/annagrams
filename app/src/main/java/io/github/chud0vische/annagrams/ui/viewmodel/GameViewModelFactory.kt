@@ -1,10 +1,10 @@
-package io.github.chud0vische.annagrams.ui.game
+package io.github.chud0vische.annagrams.ui.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.github.chud0vische.annagrams.data.AppDatabase
-import io.github.chud0vische.annagrams.data.LevelRepository
+import io.github.chud0vische.annagrams.data.db.AppDatabase
+import io.github.chud0vische.annagrams.data.repository.LevelRepository
 
 class GameViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
