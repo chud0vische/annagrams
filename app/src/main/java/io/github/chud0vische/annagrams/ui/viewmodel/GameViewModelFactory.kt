@@ -11,6 +11,7 @@ class GameViewModelFactory(private val context: Context) : ViewModelProvider.Fac
         if (modelClass.isAssignableFrom(GameViewModel::class.java)) {
             val dao = AppDatabase.getDatabase(context).wordDao()
             val repository = LevelRepository(dao)
+
             @Suppress("UNCHECKED_CAST")
             return GameViewModel(repository) as T
         }

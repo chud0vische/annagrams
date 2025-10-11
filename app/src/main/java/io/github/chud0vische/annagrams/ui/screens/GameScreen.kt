@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
 import io.github.chud0vische.annagrams.ui.components.molecules.NavigationButton
 import io.github.chud0vische.annagrams.ui.components.organisms.InputPanel
-import io.github.chud0vische.annagrams.ui.components.organisms.WordGrid
+import io.github.chud0vische.annagrams.ui.components.organisms.CrosswordGrid
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
 import io.github.chud0vische.annagrams.ui.theme.FoundWordColor
 
 
 @Composable
-fun PuzzleBoardScreen(viewModel: GameViewModel) {
+fun GameScreen(viewModel: GameViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     var typedWord by remember { mutableStateOf("") }
 
@@ -58,7 +58,7 @@ fun PuzzleBoardScreen(viewModel: GameViewModel) {
                 verticalArrangement = Arrangement.SpaceBetween // Распределяет пространство
             ) {
 
-                WordGrid(
+                CrosswordGrid(
                     placedWords = uiState.crosswordWords,
                     foundWords = uiState.foundWords,
                     modifier = Modifier
@@ -88,7 +88,7 @@ fun PuzzleBoardScreen(viewModel: GameViewModel) {
                 }
 
                 InputPanel(
-                    letters = uiState.letters,
+                    letters = uiState.inputLetters,
                     onWordCollect = { word ->
                         viewModel.submitWord(word)
                         typedWord = ""

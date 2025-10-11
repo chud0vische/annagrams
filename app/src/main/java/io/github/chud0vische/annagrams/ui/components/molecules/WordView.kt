@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.data.model.WordDirection
-import io.github.chud0vische.annagrams.ui.components.atoms.LetterView
+import io.github.chud0vische.annagrams.ui.components.atoms.CrosswordCellView
 
 @Composable
 fun WordView(
@@ -23,7 +23,7 @@ fun WordView(
             ) {
                 word.forEach { char ->
 
-                    LetterView(
+                    CrosswordCellView(
                         letter = if (isFound) char else null,
                     )
                 }

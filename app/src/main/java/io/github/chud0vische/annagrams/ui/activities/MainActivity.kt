@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import io.github.chud0vische.annagrams.ui.screens.PuzzleBoardScreen
+import io.github.chud0vische.annagrams.ui.screens.GameScreen
 import io.github.chud0vische.annagrams.ui.theme.AnnagramsTheme
 import io.github.chud0vische.annagrams.ui.theme.AppBackgroundColor
 import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.Companion.fillMaxSize(),
                     color = AppBackgroundColor
                 ) {
-                    PuzzleBoardScreen(viewModel = gameViewModel)
+                    GameScreen(viewModel = gameViewModel)
                 }
             }
         }

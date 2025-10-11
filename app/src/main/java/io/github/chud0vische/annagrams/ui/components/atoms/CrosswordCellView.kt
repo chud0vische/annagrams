@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
 
 @Composable
-fun LetterView(letter: Char?, modifier: Modifier = Modifier) {
+fun CrosswordCellView(letter: Char?, modifier: Modifier = Modifier) {
     val boxSize = Dimensions.letterBoxSize
     val cornerRadius = Dimensions.letterBoxCornerRadius
 

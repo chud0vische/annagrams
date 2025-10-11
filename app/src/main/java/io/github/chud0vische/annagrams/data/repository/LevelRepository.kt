@@ -1,6 +1,7 @@
 package io.github.chud0vische.annagrams.data.repository
 
 import io.github.chud0vische.annagrams.data.db.WordDao
+import io.github.chud0vische.annagrams.data.model.Crossword
 import io.github.chud0vische.annagrams.data.model.CrosswordWord
 import io.github.chud0vische.annagrams.data.model.Level
 import io.github.chud0vische.annagrams.data.model.Point
@@ -8,46 +9,44 @@ import io.github.chud0vische.annagrams.data.model.WordDirection
 
 class LevelRepository(private val wordDao: WordDao) {
     suspend fun generateLevel(wordLength: Int = 5): Level? {
-        val mainWord = wordDao.getRandomWordByLength(wordLength)?.word?.toCharArray()?.toList() ?:
-            return null
-
+        val mainWord = wordDao.getRandomWordByLength(wordLength)?.word ?: return null
         val allWordsFromDb = wordDao.getAllWords()
 
-        val allPossibleSubWords = findSubWords(mainWord.joinToString(), allWordsFromDb)
+        val allPossibleSubWords = findSubWords(mainWord, allWordsFromDb)
 
         if (allPossibleSubWords.size < 5) {
+            // TODO: обработать, случай когда невозможно сгенирировать
             return generateLevel(wordLength)
         }
 
-        allPossibleSubWords
-            .toMutableList()
-            .shuffle()
-
-        val crosswordWordsSet = allPossibleSubWords
+        val crosswordWords = allPossibleSubWords
             .take(5)
+            .mapIndexed { i, word ->
+                CrosswordWord(
+                    word.toList(),
+                    Point(0, i),
+                    WordDirection.HORIZONTAL
+                )
+            }.toSet()
+
+        val bonusWords = allPossibleSubWords
+            .drop(5)
+            .map { it.toList() }
             .toSet()
 
-        val bonusWords = (allPossibleSubWords - crosswordWordsSet).map { it.toList() }.toSet()
+        val crossword = Crossword.createCrosswordFromWords(
+            // TODO: изменение размера сетки
+            5,
+            5,
+            crosswordWords,
+        )
 
-        val crosswordWords = crosswordWordsSet
-            .toList()
-            .map { word ->
-                word.toList()
-            }
-            .toSet()
-
-        val placements = crosswordWords.mapIndexed { index, word ->
-            CrosswordWord(
-                word = word,
-                startPoint = Point(x = 0, y = index),
-                direction = WordDirection.HORIZONTAL
-            )
-        }
+        val inputLetters = mainWord.toList()
 
         return Level(
-            letters = mainWord.shuffled(),
-            crosswordWords = placements,
-            bonusWordsPool = bonusWords
+            crossword,
+            bonusWords,
+            inputLetters
         )
     }
 
@@ -64,7 +63,6 @@ class LevelRepository(private val wordDao: WordDao) {
             wordCharCount.all { (char, count) ->
                 count <= mainWordCharCount.getOrDefault(char, 0)
             }
-
-        }.toSet()
+        }.shuffled().toSet()
     }
 }

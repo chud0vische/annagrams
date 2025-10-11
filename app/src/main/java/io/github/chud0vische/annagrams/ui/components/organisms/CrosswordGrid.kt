@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.ui.components.molecules.WordView
 
 @Composable
-fun WordGrid(
+fun CrosswordGrid(
     placedWords: List<CrosswordWord>,
     foundWords: Set<String>,
     modifier: Modifier = Modifier
