@@ -1,10 +1,21 @@
 package io.github.chud0vische.annagrams.ui.theme
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+object AppDimensions {
+    val shuffleButtonSize = 75.dp
+    val paddingMedium = 20.dp
+}
 
-object Dimen {
+
+object Dimensions {
     val letterBoxSize = 52.dp
     val letterBoxCornerRadius = 8.dp
     val letterBoxFontSize = 32.sp
@@ -24,7 +35,7 @@ object Dimen {
     val distanceBetweenLetters = 110
     val lineStrokeWidth = 10f
 
-    val shuffleButtonSize = 75.dp
+
 
     val actionButtonWidth = 150.dp
     val actionButtonHeight = 50.dp

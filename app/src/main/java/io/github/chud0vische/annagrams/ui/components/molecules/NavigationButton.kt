@@ -1,4 +1,4 @@
-package io.github.chud0vische.annagrams.ui.composables
+package io.github.chud0vische.annagrams.ui.components.molecules
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import io.github.chud0vische.annagrams.ui.theme.Dimen
+import io.github.chud0vische.annagrams.ui.theme.Dimensions
 
 @Composable
-fun LevelControlButton(
+fun NavigationButton(
     isLevelCompleted: Boolean,
     onRestartClick: () -> Unit,
     onNextLevelClick: () -> Unit,
@@ -24,8 +24,8 @@ fun LevelControlButton(
 ) {
     Box(
         modifier = modifier
-            .padding(Dimen.screenPadding)
-            .size(width = Dimen.actionButtonWidth, height = Dimen.actionButtonHeight)
+            .padding(Dimensions.screenPadding)
+            .size(width = Dimensions.actionButtonWidth, height = Dimensions.actionButtonHeight)
             .clip(CircleShape)
             .background(if (isLevelCompleted) Color.Green else Color.Red)
             .clickable {
@@ -36,7 +36,7 @@ fun LevelControlButton(
         Text(
             text = if (isLevelCompleted) "Next" else "Restart",
             color = Color.White,
-            fontSize = Dimen.smallFont,
+            fontSize = Dimensions.smallFont,
             fontWeight = FontWeight.Bold
         )
     }

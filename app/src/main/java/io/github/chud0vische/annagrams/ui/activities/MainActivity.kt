@@ -1,17 +1,17 @@
-package io.github.chud0vische.annagrams
+package io.github.chud0vische.annagrams.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import io.github.chud0vische.annagrams.ui.theme.AnnagramsTheme
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import io.github.chud0vische.annagrams.ui.game.GameViewModel
-import io.github.chud0vische.annagrams.ui.screens.PuzzleBoardScreen
-import io.github.chud0vische.annagrams.ui.theme.*
-import io.github.chud0vische.annagrams.ui.game.GameViewModelFactory
+import io.github.chud0vische.annagrams.ui.screens.GameScreen
+import io.github.chud0vische.annagrams.ui.theme.AnnagramsTheme
+import io.github.chud0vische.annagrams.ui.theme.AppBackgroundColor
+import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
+import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModelFactory
 
 class MainActivity : ComponentActivity() {
     private val gameViewModel: GameViewModel by viewModels {
@@ -24,15 +24,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             AnnagramsTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.Companion.fillMaxSize(),
                     color = AppBackgroundColor
                 ) {
-                    PuzzleBoardScreen(viewModel = gameViewModel)
+                    GameScreen(viewModel = gameViewModel)
                 }
             }
         }
     }
 }
-
-
-

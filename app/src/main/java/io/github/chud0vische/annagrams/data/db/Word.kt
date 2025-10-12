@@ -1,4 +1,4 @@
-package io.github.chud0vische.annagrams.data
+package io.github.chud0vische.annagrams.data.db
 
 import androidx.room.Entity
 import androidx.room.Index
