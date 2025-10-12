@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
 import io.github.chud0vische.annagrams.ui.components.molecules.NavigationButton
 import io.github.chud0vische.annagrams.ui.components.organisms.InputPanel
-import io.github.chud0vische.annagrams.ui.components.organisms.CrosswordGrid
+import io.github.chud0vische.annagrams.ui.components.organisms.CrosswordView
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
 import io.github.chud0vische.annagrams.ui.theme.FoundWordColor
 
@@ -36,34 +36,26 @@ fun GameScreen(viewModel: GameViewModel) {
         contentAlignment = Alignment.Center
     ) {
         if (uiState.isLoading) {
-            if (uiState.crosswordWords.isEmpty()) {
-                CircularProgressIndicator()
-            }
+            CircularProgressIndicator()
         }
 
-        if (!uiState.isLoading && uiState.crosswordWords.isEmpty()) {
+        if (!uiState.isLoading && uiState.crossword.words.isEmpty()) {
             Text(
                 "Не удалось сгенерировать уровень.\nПроверьте базу данных.",
                 color = Color.Red,
                 fontWeight = FontWeight.Bold
             )
         }
-        else if (uiState.crosswordWords.isNotEmpty()) {
-            // ИСПОЛЬЗУЕМ COLUMN ДЛЯ ВЕРТИКАЛЬНОГО РАСПРЕДЕЛЕНИЯ
+        else if (!uiState.isLoading && !uiState.crossword.words.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(Dimensions.screenPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween // Распределяет пространство
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-
-                CrosswordGrid(
-                    placedWords = uiState.crosswordWords,
-                    foundWords = uiState.foundWords,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(top = Dimensions.foundWordsListTopPadding)
+                CrosswordView(
+                    uiState.crossword,
                 )
 
                 Box(
@@ -71,7 +63,7 @@ fun GameScreen(viewModel: GameViewModel) {
                     modifier = Modifier.padding(vertical = 16.dp)
                 ) {
                     Text(
-                        text = typedWord.ifEmpty { " " },
+                        text = typedWord.ifEmpty { "" },
                         fontSize = Dimensions.mediumFont,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -88,13 +80,12 @@ fun GameScreen(viewModel: GameViewModel) {
                 }
 
                 InputPanel(
-                    letters = uiState.inputLetters,
+                    inputLetters = uiState.inputLetters,
                     onWordCollect = { word ->
-                        viewModel.submitWord(word)
+                        viewModel.submitWord(word.toList())
                         typedWord = ""
                     },
                     onLetterSelected = { letter -> typedWord += letter },
-                    onShuffleClick = { /* TODO */ },
                     modifier = Modifier.padding(bottom = Dimensions.keyboardBottomPadding)
                 )
             }
@@ -105,7 +96,7 @@ fun GameScreen(viewModel: GameViewModel) {
                 onNextLevelClick = { viewModel.loadLevel() },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(Dimensions.screenPadding) // Добавим отступы
+                    .padding(Dimensions.screenPadding)
             )
         }
     }

@@ -14,8 +14,9 @@ class LevelRepository(private val wordDao: WordDao) {
 
         val allPossibleSubWords = findSubWords(mainWord, allWordsFromDb)
 
+        // TODO: обработать, случай когда невозможно сгенирировать
         if (allPossibleSubWords.size < 5) {
-            // TODO: обработать, случай когда невозможно сгенирировать
+
             return generateLevel(wordLength)
         }
 

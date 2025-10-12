@@ -18,9 +18,10 @@ data class GameUiState(
     val isLevelCompleted: Boolean = false,
     val isLoading: Boolean = true
 )
-
 class GameViewModel(private val repository: LevelRepository): ViewModel() {
-    private val _uiState = MutableStateFlow(GameUiState(Crossword.createEmpty()))
+    private val _uiState = MutableStateFlow(
+        GameUiState(Crossword.createEmpty())
+    )
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -57,50 +58,51 @@ class GameViewModel(private val repository: LevelRepository): ViewModel() {
         }
     }
 
-    fun submitWord(submittedWord: String) {
+    fun submitWord(submittedWord: List<Char>) {
         _uiState.update { currentState ->
-            val submittedWordAsList = submittedWord.lowercase().toList()
+            val isAlreadyFound = submittedWord in currentState.foundWords
+                    && submittedWord in currentState.foundBonusWords
 
-            val isMainWord = currentState.crossword.words.any { it.chars == submittedWordAsList }
-            val isBonusWord = submittedWordAsList in currentState.bonusWordsPool
+            val isNewBonusWord = submittedWord in currentState.bonusWordsPool
+                    && submittedWord !in currentState.foundBonusWords
+
+            val isNewCrosswordWord = submittedWord !in currentState.foundWords
+                    && submittedWord in currentState.crossword.words.map { it.chars }
 
             when {
-                isMainWord && submittedWordAsList !in currentState.foundWords -> {
-                    val updatedCrossword = currentState.crossword.revealWord(submittedWordAsList)
-                    val newFoundWords = setOf<List<Char>>()
-
-                    currentState.copy(
-                        updatedCrossword,
-                        foundWords = newFoundWords
-                    )
+                //TODO: Показать, что слово уже найдено
+                isAlreadyFound -> {
+                    currentState
                 }
 
-                isBonusWord && submittedWordAsList !in currentState.foundBonusWords -> {
-                    val newFoundBonusWords = currentState.foundBonusWords + submittedWordAsList
-
-                    // TODO: Показать анимацию "Бонусное слово"
+                // TODO: Показать анимацию "Бонусное слово"
+                isNewBonusWord -> {
+                    val newFoundBonusWords = currentState.foundBonusWords + setOf(submittedWord)
                     currentState.copy(foundBonusWords = newFoundBonusWords)
                 }
 
-                submittedWordAsList in currentState.foundWords || submittedWordAsList in currentState.foundBonusWords -> {
-                    // TODO: Показать короткое сообщение: "Слово уже найдено"
-                    currentState
+                // TODO: Анимация нахождения слова кроссворда
+                isNewCrosswordWord -> {
+                    val newFoundCrosswordWords = currentState.foundWords + setOf(submittedWord)
+
+                    currentState.copy(
+                        crossword = currentState.crossword.revealWord(submittedWord),
+                        foundWords = newFoundCrosswordWords
+                    )
                 }
 
-                else -> {
-                    currentState
-                }
+                else -> currentState
             }
         }
+
+        checkLevelCompletion()
     }
 
     private fun checkLevelCompletion() {
         val currentState = _uiState.value
 
-        if (currentState.foundWords.size == currentState.crosswordWords.size) {
+        // TODO: Показать "Уровень пройден!"
+        if (currentState.foundWords.size == currentState.crossword.words.size)
             _uiState.update { it.copy(isLevelCompleted = true) }
-            // TODO: Показать диалог "Уровень пройден!"
-        }
     }
-
 }

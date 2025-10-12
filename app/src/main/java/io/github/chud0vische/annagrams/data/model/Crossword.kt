@@ -22,28 +22,30 @@ data class Crossword(
             words: Set<CrosswordWord>,
             emptyChar: Char = ' '
         ): Crossword {
-            val initialGrid: MutableList<MutableList<Char>> =
+            val emptyGrid: MutableList<MutableList<Char>> =
                 MutableList(height) { MutableList(width) { emptyChar } }
+
+            val grid = emptyGrid.mapIndexed { y, row ->
+                row.mapIndexed { x, char ->
+                    CrosswordCell(char, CrosswordCellType.EMPTY)
+                }
+            }
+
+            val newGridMutable = grid.map { it.toMutableList() }.toMutableList()
 
             for (word in words) {
                 var x = word.startPoint.x
                 var y = word.startPoint.y
 
                 for (char in word.chars) {
-                    initialGrid[y][x] = char
+                    newGridMutable[y][x] = CrosswordCell(char, CrosswordCellType.HIDDEN)
+
                     if (word.direction == WordDirection.HORIZONTAL) x++ else y++
                 }
             }
 
-            // hiding all crossword cells
-            val cellGrid = initialGrid.mapIndexed { y, row ->
-                row.mapIndexed { x, char ->
-                    CrosswordCell(char = char, isVisible = false)
-                }
-            }
-
             return Crossword(
-                cellGrid,
+                newGridMutable,
                 width,
                 height,
                 words
@@ -59,7 +61,7 @@ data class Crossword(
         val newGridMutable = grid.map { it.toMutableList() }.toMutableList()
 
         val oldCell = newGridMutable[point.y][point.x]
-        val newCell = oldCell.copy(isVisible = true)
+        val newCell = oldCell.copy(type = CrosswordCellType.HINTED)
 
         newGridMutable[point.y][point.x] = newCell
 
@@ -76,7 +78,7 @@ data class Crossword(
 
         for (char in word.chars) {
             val oldCell = newGridMutable[y][x]
-            newGridMutable[y][x] = oldCell.copy(isVisible = true)
+            newGridMutable[y][x] = oldCell.copy(type = CrosswordCellType.REVEALED)
 
             when (word.direction)  {
                 WordDirection.HORIZONTAL -> x++
