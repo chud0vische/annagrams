@@ -1,31 +1,42 @@
 package io.github.chud0vische.annagrams.ui.components.organisms
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.data.model.Crossword
 import io.github.chud0vische.annagrams.ui.components.atoms.CrosswordCellView
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun CrosswordView(
     crossword: Crossword,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier) {
+        if (crossword.width > 0) {
+            val cellSize = maxWidth / crossword.width
+            val padding = 2.dp
+            val finalCellSize = cellSize - (padding * 2)
 
-        crossword.grid.forEach { row -> // row — это список CrosswordCell
-
-            Row {
-                row.forEach { cell -> // cell — это CrosswordCell
-
-                    CrosswordCellView(
-                        cell = cell,
-                        // Добавляем отступ ко всем сторонам ячейки
-                        modifier = Modifier.padding(2.dp)
-                    )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                crossword.grid.forEach { row ->
+                    Row {
+                        row.forEach { cell ->
+                            CrosswordCellView(
+                                cell = cell,
+                                size = finalCellSize,
+                                modifier = Modifier
+                                    .padding(padding)
+                            )
+                        }
+                    }
                 }
             }
         }

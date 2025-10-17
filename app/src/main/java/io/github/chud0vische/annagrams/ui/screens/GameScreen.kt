@@ -43,7 +43,8 @@ fun GameScreen(viewModel: GameViewModel) {
             Text(
                 "Не удалось сгенерировать уровень.\nПроверьте базу данных.",
                 color = Color.Red,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontSize = Dimensions.largeFont
             )
         }
         else if (!uiState.isLoading && !uiState.crossword.words.isEmpty()) {
@@ -56,6 +57,7 @@ fun GameScreen(viewModel: GameViewModel) {
             ) {
                 CrosswordView(
                     uiState.crossword,
+                    modifier = Modifier.padding(top = 50.dp)
                 )
 
                 Box(
@@ -86,13 +88,13 @@ fun GameScreen(viewModel: GameViewModel) {
                         typedWord = ""
                     },
                     onLetterSelected = { letter -> typedWord += letter },
-                    modifier = Modifier.padding(bottom = Dimensions.keyboardBottomPadding)
+                    modifier = Modifier.padding(bottom = 50.dp)
                 )
             }
 
             NavigationButton(
                 isLevelCompleted = uiState.isLevelCompleted,
-                onRestartClick = { /* TODO */ },
+                onRestartClick = { viewModel.loadLevel() },
                 onNextLevelClick = { viewModel.loadLevel() },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
