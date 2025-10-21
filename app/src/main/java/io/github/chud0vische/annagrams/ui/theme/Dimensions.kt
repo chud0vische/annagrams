@@ -12,6 +12,9 @@ import androidx.compose.ui.unit.sp
 object AppDimensions {
     val shuffleButtonSize = 75.dp
     val paddingMedium = 20.dp
+
+    val cellCornerRadius = 8.dp
+    val cellBorderSize = 1.dp
 }
 
 
