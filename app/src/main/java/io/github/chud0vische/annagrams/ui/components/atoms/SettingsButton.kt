@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Dehaze
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
@@ -37,7 +38,7 @@ fun SettingsButton(
             )
     ) {
         Icon(
-            imageVector = Icons.Default.Settings,
+            imageVector = Icons.Default.Dehaze,
             tint = Color.White,
             contentDescription = "Settings",
             modifier = modifier

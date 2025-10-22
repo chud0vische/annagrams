@@ -26,9 +26,12 @@ val CellBorderColor = Color(0xFF7E8695).copy(alpha = 0.3F)
 val CellRevealedTextColor = Color(0xFF2C2C2C)
 val CellHintedTextColor = Color(0xFFE7E7E7)
 val CellRevealedInnerShadowColor = Color(0xFF6781DA).copy(alpha = 0.3F)
-val CellRevealedShadowColor = Color(0xFFEFF0F4).copy(alpha = 0.1F)
+val CellRevealedShadowColor = Color(0xFF717FC1).copy(alpha = 0.1F)
 
 val ButtonBackgroundColor = Color(0xFF272727)
+
+val CircularIndicatorColor = Color(0xFF7E8CDD)
+
 
 fun starGradient(height: Dp, width: Dp) = Brush.radialGradient(
     colors = listOf(Color(0xFFDABBE8), Color(0xFF3769D4)),

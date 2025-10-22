@@ -20,6 +20,8 @@ object AppDimensions {
 
     val cellMargin = 1.dp
     val gameScreenPadding = 32.dp
+
+    val paddingSmall = 12.dp
 }
 
 

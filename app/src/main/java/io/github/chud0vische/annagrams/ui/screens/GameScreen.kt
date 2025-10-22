@@ -1,11 +1,14 @@
 package io.github.chud0vische.annagrams.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,9 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.ui.components.atoms.SettingsButton
+import io.github.chud0vische.annagrams.ui.components.molecules.StarsCount
 import io.github.chud0vische.annagrams.ui.components.organisms.CrosswordView
 import io.github.chud0vische.annagrams.ui.components.organisms.InputPanel
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
+import io.github.chud0vische.annagrams.ui.theme.CircularIndicatorColor
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
 import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
 
@@ -39,7 +44,9 @@ fun GameScreen(viewModel: GameViewModel) {
         contentAlignment = Alignment.Center
     ) {
         if (uiState.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                color = CircularIndicatorColor
+            )
         }
 
         if (!uiState.isLoading && uiState.crossword.words.isEmpty()) {
@@ -57,9 +64,23 @@ fun GameScreen(viewModel: GameViewModel) {
                     .padding(horizontal = AppDimensions.gameScreenPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                SettingsButton(
-                    onClick = { viewModel.loadLevel() }
-                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        StarsCount(count = 12)
+                        SettingsButton(
+                            onClick = { viewModel.loadLevel() }
+                        )
+                    }
+                }
+
                 CrosswordView(
                     uiState.crossword,
                     modifier = Modifier

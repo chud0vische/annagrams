@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import io.github.chud0vische.annagrams.data.model.Crossword
 import io.github.chud0vische.annagrams.ui.components.atoms.CrosswordCellView
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
@@ -22,7 +23,11 @@ fun CrosswordView(
 ) {
     BoxWithConstraints(modifier = modifier) {
         if (crossword.width > 0) {
-            val cellSize = maxWidth / crossword.width
+            val cellWidth = maxWidth / crossword.width
+            val cellHeight = maxHeight / crossword.height
+
+            val cellSize = min(cellWidth, cellHeight)
+
             val finalCellSize = cellSize - (AppDimensions.cellMargin * 2)
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
