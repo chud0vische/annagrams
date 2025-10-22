@@ -1,12 +1,11 @@
 package io.github.chud0vische.annagrams.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,12 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
-import io.github.chud0vische.annagrams.ui.components.molecules.NavigationButton
-import io.github.chud0vische.annagrams.ui.components.organisms.InputPanel
+import io.github.chud0vische.annagrams.ui.components.atoms.SettingsButton
 import io.github.chud0vische.annagrams.ui.components.organisms.CrosswordView
+import io.github.chud0vische.annagrams.ui.components.organisms.InputPanel
+import io.github.chud0vische.annagrams.ui.theme.AppDimensions
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
-import io.github.chud0vische.annagrams.ui.theme.FoundWordColor
+import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
 
 
 @Composable
@@ -55,13 +54,17 @@ fun GameScreen(viewModel: GameViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(Dimensions.screenPadding),
+                    .padding(horizontal = AppDimensions.gameScreenPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
             ) {
+                SettingsButton(
+                    onClick = { viewModel.loadLevel() }
+                )
                 CrosswordView(
                     uiState.crossword,
-                    modifier = Modifier.padding(top = 50.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
                 )
 
                 Box(
@@ -75,14 +78,14 @@ fun GameScreen(viewModel: GameViewModel) {
                         color = Color.White
                     )
 
-                    if (uiState.isLevelCompleted) {
-                        Text(
-                            text = "Level Completed!",
-                            fontSize = Dimensions.largeFont,
-                            fontWeight = FontWeight.Bold,
-                            color = FoundWordColor
-                        )
-                    }
+//                    if (uiState.isLevelCompleted) {
+//                        Text(
+//                            text = "Level Completed!",
+//                            fontSize = Dimensions.largeFont,
+//                            fontWeight = FontWeight.Bold,
+//                            color = FoundWordColor
+//                        )
+//                    }
                 }
 
                 InputPanel(
@@ -92,18 +95,17 @@ fun GameScreen(viewModel: GameViewModel) {
                         typedWord = ""
                     },
                     onLetterSelected = { letter -> typedWord += letter },
-                    modifier = Modifier.padding(bottom = 50.dp)
                 )
             }
 
-            NavigationButton(
-                isLevelCompleted = uiState.isLevelCompleted,
-                onRestartClick = { viewModel.loadLevel() },
-                onNextLevelClick = { viewModel.loadLevel() },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(Dimensions.screenPadding)
-            )
+//            NavigationButton(
+//                isLevelCompleted = uiState.isLevelCompleted,
+//                onRestartClick = { viewModel.loadLevel() },
+//                onNextLevelClick = { viewModel.loadLevel() },
+//                modifier = Modifier
+//                    .align(Alignment.BottomEnd)
+//                    .padding(Dimensions.screenPadding)
+//            )
         }
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.innerShadow
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -19,7 +18,6 @@ import io.github.chud0vische.annagrams.data.model.CrosswordCellType
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.shadow.Shadow
 
 @Composable
@@ -37,35 +35,35 @@ fun CrosswordCellView(
     val innerShadowColor = colors.innerShadowColor(cell.type).value
     val shadowColor = colors.shadowColor(cell.type).value
 
-
     val fontSize = (size.value / 2.2f).sp
-    val cornerRadius = (size.value / 5f).dp
+    val cornerRadius = (size.value / 6f).dp
+    val cellShape = RoundedCornerShape(cornerRadius)
 
     Box(
         modifier = modifier
             .size(size)
+            .dropShadow(
+                cellShape,
+                Shadow(
+                    radius = cornerRadius,
+                    color = shadowColor
+                )
+            )
             .background(
                 backgroundColor,
-                RoundedCornerShape(cornerRadius)
-            )
-            .border(
-                AppDimensions.cellBorderSize,
-                borderColor,
-                RoundedCornerShape(cornerRadius)
+                cellShape
             )
             .innerShadow(
-                RoundedCornerShape(cornerRadius),
+                cellShape,
                 Shadow(
                     radius = cornerRadius,
                     color = innerShadowColor
                 )
             )
-            .dropShadow(
-                RoundedCornerShape(cornerRadius),
-                Shadow(
-                    radius = cornerRadius,
-                    color = shadowColor
-                )
+            .border(
+                AppDimensions.cellBorderSize,
+                borderColor,
+                cellShape
             ),
         contentAlignment = Alignment.Center,
     ) {
