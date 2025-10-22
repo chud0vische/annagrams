@@ -8,7 +8,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.innerShadow
+import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -16,9 +20,7 @@ import androidx.compose.ui.unit.sp
 import io.github.chud0vische.annagrams.data.model.CrosswordCell
 import io.github.chud0vische.annagrams.data.model.CrosswordCellType
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.graphics.shadow.Shadow
+import io.github.chud0vische.annagrams.ui.theme.starGradient
 
 @Composable
 fun CrosswordCellView(
@@ -27,8 +29,6 @@ fun CrosswordCellView(
     modifier: Modifier = Modifier,
     colors: CrosswordCellColors = CrosswordCellDefaults.colors()
 ) {
-    val isCharVisible = cell.type == CrosswordCellType.HINTED || cell.type == CrosswordCellType.REVEALED
-
     val backgroundColor = colors.backgroundColor(cell.type).value
     val borderColor = colors.borderColor(cell.type).value
     val textColor = colors.contentColor(cell.type).value
@@ -38,6 +38,12 @@ fun CrosswordCellView(
     val fontSize = (size.value / 2.2f).sp
     val cornerRadius = (size.value / 6f).dp
     val cellShape = RoundedCornerShape(cornerRadius)
+
+    val cellTextStyle = TextStyle(
+        brush = if (cell.type == CrosswordCellType.REVEALED) starGradient(size, size) else null,
+        fontWeight = FontWeight.Bold
+    )
+
 
     Box(
         modifier = modifier
@@ -67,12 +73,12 @@ fun CrosswordCellView(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        if (isCharVisible) {
+        if (cell.type == CrosswordCellType.HINTED || cell.type == CrosswordCellType.REVEALED) {
             Text(
                 text = cell.char.toString().uppercase(),
                 color = textColor,
+                style = cellTextStyle,
                 fontSize = fontSize,
-                fontWeight = FontWeight.Bold
             )
         }
     }

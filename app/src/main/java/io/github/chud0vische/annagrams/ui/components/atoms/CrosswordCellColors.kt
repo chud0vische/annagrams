@@ -5,7 +5,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
-import io.github.chud0vische.annagrams.data.model.Crossword
 import io.github.chud0vische.annagrams.data.model.CrosswordCellType
 import io.github.chud0vische.annagrams.ui.theme.CellBorderColor
 import io.github.chud0vische.annagrams.ui.theme.CellHiddenColor
@@ -26,7 +25,7 @@ class CrosswordCellColors internal constructor(
     private val emptyBorderColor: Color,
     private val hintedContentColor: Color,
     private val revealedContentColor: Color,
-    private val emptyContentColor: Color
+    private val emptyContentColor: Color,
 ) {
     @Composable
     internal fun backgroundColor(type: CrosswordCellType): State<Color> {
@@ -90,7 +89,7 @@ object CrosswordCellDefaults {
         emptyBorderColor: Color = Color.Transparent,
         hintedContentColor: Color = CellHintedTextColor,
         revealedContentColor: Color = CellRevealedTextColor,
-        emptyContentColor: Color = Color.Transparent
+        emptyContentColor: Color = Color.Transparent,
     ): CrosswordCellColors = CrosswordCellColors(
         emptyBackgroundColor = emptyBackgroundColor,
         hiddenBackgroundColor = hiddenBackgroundColor,
@@ -100,6 +99,6 @@ object CrosswordCellDefaults {
         emptyBorderColor = emptyBorderColor,
         hintedContentColor = hintedContentColor,
         revealedContentColor = revealedContentColor,
-        emptyContentColor = emptyContentColor
+        emptyContentColor = emptyContentColor,
     )
 }
