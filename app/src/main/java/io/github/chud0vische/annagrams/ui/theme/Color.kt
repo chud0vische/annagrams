@@ -32,15 +32,23 @@ val ButtonBackgroundColor = Color(0xFF272727)
 
 val CircularIndicatorColor = Color(0xFF7E8CDD)
 
+val InputButtonBackgroundColor = Color(0xFF464646)
+
+val InputPadBackgroundColor = Color(0xFF202020)
+
+val BasicPinkColor = Color(0xFFDABBE8)
+val BasicBlueColor = Color(0xFF8590DE)
+
+val ShuffleButtonColor = Color(0xFF2D2D2D)
 
 fun starGradient(height: Dp, width: Dp) = Brush.radialGradient(
     colors = listOf(Color(0xFFDABBE8), Color(0xFF3769D4)),
-    center = Offset(height.toFloat() / 2F, width.toFloat() / 2F),
+    center = Offset(height.toFloat() / 2F, width.toFloat() / 1F),
     radius = height.toFloat(),
 )
 
 val ButtonBorderColor = Brush.linearGradient(
-    listOf(Color.White.copy(0.15F), Color(0xFF999999).copy(0.08F)),
+    listOf(Color.White.copy(0.10F), Color(0xFF999999).copy(0F)),
     Offset( Float.POSITIVE_INFINITY, 0F),
     Offset(0F, Float.POSITIVE_INFINITY, )
 )

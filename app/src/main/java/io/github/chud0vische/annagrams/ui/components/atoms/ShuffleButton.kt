@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import io.github.chud0vische.annagrams.ui.theme.ShuffleButtonColor
 import io.github.chud0vische.annagrams.ui.theme.modifiers.shuffleButtonIconStyle
 import io.github.chud0vische.annagrams.ui.theme.modifiers.shuffleButtonStyle
 
@@ -27,7 +28,7 @@ fun ShuffleButton(
         Icon(
             imageVector = Icons.Default.Shuffle,
             contentDescription = "Shuffle letters",
-            tint = Color.White,
+            tint = Color.White.copy(alpha = 0.5f),
             modifier = Modifier.shuffleButtonIconStyle()
         )
     }

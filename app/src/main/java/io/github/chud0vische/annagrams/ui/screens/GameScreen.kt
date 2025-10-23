@@ -60,14 +60,21 @@ fun GameScreen(viewModel: GameViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = AppDimensions.gameScreenPadding),
+                    .padding(
+                        top = 0.dp,
+                        start = AppDimensions.gameScreenPadding,
+                        end = AppDimensions.gameScreenPadding,
+                        bottom = AppDimensions.gameScreenPadding
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 24.dp)
+                        .padding(
+                            vertical = 24.dp
+                        )
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -91,8 +98,7 @@ fun GameScreen(viewModel: GameViewModel) {
                     inputLetters = uiState.inputLetters,
                     onWordCollect = { word ->
                         viewModel.submitWord(word.toList())
-                    },
-                    modifier = Modifier.padding(top = 16.dp)
+                    }
                 )
             }
 

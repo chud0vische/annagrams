@@ -1,5 +1,6 @@
 package io.github.chud0vische.annagrams.ui.components.molecules
 
+import androidx.compose.animation.core.copy
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,12 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.ui.theme.ButtonBackgroundColor
 import io.github.chud0vische.annagrams.ui.theme.ButtonBorderColor
+import io.github.chud0vische.annagrams.ui.theme.InputButtonBackgroundColor
+import io.github.chud0vische.annagrams.ui.theme.InputPadBackgroundColor
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -29,7 +34,8 @@ fun InputPad(
     letterPositions: MutableState<Map<Int, Rect>>,
     selectedIndices: List<Int>,
     dragPosition: Offset?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    shuffleButton: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier,
@@ -39,11 +45,10 @@ fun InputPad(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(ButtonBackgroundColor, CircleShape)
+                    .background(InputPadBackgroundColor, CircleShape)
                     .border(
                         1.dp,
                         brush = ButtonBorderColor,
@@ -52,6 +57,9 @@ fun InputPad(
             )
 
             Canvas(modifier = Modifier.fillMaxSize()) {
+                val lineColor = InputButtonBackgroundColor
+                val lineStrokeWidth = 10f
+
                 val positions = letterPositions.value
                 val indices = selectedIndices
 
@@ -62,10 +70,10 @@ fun InputPad(
 
                         if (fromCenter != null && toCenter != null) {
                             drawLine(
-                                color = Color.White,
+                                color = lineColor,
                                 start = fromCenter,
                                 end = toCenter,
-                                strokeWidth = 10f,
+                                strokeWidth = lineStrokeWidth,
                                 cap = StrokeCap.Round
                             )
                         }
@@ -75,14 +83,16 @@ fun InputPad(
                 val lastButtonCenter = indices.lastOrNull()?.let { positions[it]?.center }
                 if (lastButtonCenter != null && dragPosition != null) {
                     drawLine(
-                        color = Color.White,
+                        color = lineColor,
                         start = lastButtonCenter,
                         end = dragPosition,
-                        strokeWidth = 10f,
+                        strokeWidth = lineStrokeWidth,
                         cap = StrokeCap.Round
                     )
                 }
             }
+
+            shuffleButton()
 
             Layout(
                 content = {
@@ -96,12 +106,11 @@ fun InputPad(
                 val buttonSize = (safeAreaSize / 4).toInt()
                 val buttonConstraints = Constraints.fixed(buttonSize, buttonSize)
 
-                // Теперь measurables - это только кнопки
                 val letterPlaceables = measurables.map {
                     it.measure(buttonConstraints)
                 }
 
-                val padding = buttonSize / 4
+                val padding = buttonSize / 6
                 val radius = (safeAreaSize / 2 - buttonSize / 2 - padding).toInt()
                 val expansionPx = buttonSize * 0.1f
 

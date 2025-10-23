@@ -61,16 +61,18 @@ fun InputPanel(
                 },
             contentAlignment = Alignment.Center
         ) {
-            ShuffleButton(
-                { state.shuffleLetters() }
-            )
-
             InputPad(
                 state.letters,
                 state.letterPositions,
                 state.selectedButtonIndices,
-                state.currentDragPosition
+                state.currentDragPosition,
+                shuffleButton = {
+                    ShuffleButton(
+                        onClick = { state.shuffleLetters() }
+                    )
+                }
             )
+
         }
     }
 

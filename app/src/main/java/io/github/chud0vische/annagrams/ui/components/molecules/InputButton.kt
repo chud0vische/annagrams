@@ -7,9 +7,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.chud0vische.annagrams.ui.theme.BasicBlueColor
+import io.github.chud0vische.annagrams.ui.theme.BasicPinkColor
+import io.github.chud0vische.annagrams.ui.theme.InputButtonBackgroundColor
+import io.github.chud0vische.annagrams.ui.theme.starGradient
 
 @Composable
 fun InputButton(
@@ -20,18 +33,32 @@ fun InputButton(
     BoxWithConstraints(
         modifier = modifier
             .background(
-                color = (if (isSelected) Color.DarkGray else Color.Transparent),
+                color = if (isSelected) {
+                    InputButtonBackgroundColor
+                } else {
+                    Color.Transparent
+                },
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
     ) {
-        val fontSize = minOf(maxWidth, maxHeight).value / 2.5f
+        val fontSize = minOf(maxWidth, maxHeight).value / 2f
 
         Text(
             text = letter.uppercase(),
-            color = Color.White,
             fontSize = fontSize.sp,
-            fontWeight = FontWeight.Bold
+            color = Color.White.copy(alpha = 0.85f),
+            fontWeight = FontWeight.Bold,
+            style = TextStyle(
+                shadow = Shadow(
+                    color = (
+                        if (!isSelected) Color.White.copy(alpha = 0.05f)
+                        else BasicBlueColor
+                    ),
+                    offset = Offset.Zero,
+                    blurRadius = 20f
+                )
+            )
         )
     }
 }
