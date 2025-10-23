@@ -24,7 +24,6 @@ fun NavigationButton(
 ) {
     Box(
         modifier = modifier
-            .padding(Dimensions.screenPadding)
             .size(width = Dimensions.actionButtonWidth, height = Dimensions.actionButtonHeight)
             .clip(CircleShape)
             .background(if (isLevelCompleted) Color.Green else Color.Red)

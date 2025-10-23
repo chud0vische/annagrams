@@ -116,7 +116,6 @@ class CrosswordGenerator(
                 val x = if (placement.direction == WordDirection.HORIZONTAL) placement.startPoint.x + i else placement.startPoint.x
                 val y = if (placement.direction == WordDirection.VERTICAL) placement.startPoint.y + i else placement.startPoint.y
 
-                // Проверяем соседей перпендикулярно слову
                 val (dx, dy) = if (placement.direction == WordDirection.HORIZONTAL) (0 to 1) else (1 to 0)
 
                 if (grid[Point(x + dx, y + dy)] == null) score++
@@ -224,9 +223,6 @@ class CrosswordGenerator(
                     word.direction
                 )
             )
-
-            // finalWords.add(CrosswordWord(word.chars, Point(newStartX, newStartY), word
-            // .direction))
 
             for ((i, char) in word.chars.withIndex()) {
                 val x = if (word.direction == WordDirection.HORIZONTAL)

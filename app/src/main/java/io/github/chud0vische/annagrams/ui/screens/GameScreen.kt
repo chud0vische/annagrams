@@ -3,8 +3,12 @@ package io.github.chud0vische.annagrams.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,25 +22,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
-import io.github.chud0vische.annagrams.ui.components.molecules.NavigationButton
-import io.github.chud0vische.annagrams.ui.components.organisms.InputPanel
+import io.github.chud0vische.annagrams.ui.components.atoms.SettingsButton
+import io.github.chud0vische.annagrams.ui.components.molecules.StarsCount
 import io.github.chud0vische.annagrams.ui.components.organisms.CrosswordView
+import io.github.chud0vische.annagrams.ui.components.organisms.InputPanel
+import io.github.chud0vische.annagrams.ui.theme.AppDimensions
+import io.github.chud0vische.annagrams.ui.theme.CircularIndicatorColor
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
-import io.github.chud0vische.annagrams.ui.theme.FoundWordColor
+import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
 
 
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    var typedWord by remember { mutableStateOf("") }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding(),
         contentAlignment = Alignment.Center
     ) {
         if (uiState.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                color = CircularIndicatorColor
+            )
         }
 
         if (!uiState.isLoading && uiState.crossword.words.isEmpty()) {
@@ -50,56 +59,54 @@ fun GameScreen(viewModel: GameViewModel) {
         else if (!uiState.isLoading && !uiState.crossword.words.isEmpty()) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Dimensions.screenPadding),
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                CrosswordView(
-                    uiState.crossword,
-                    modifier = Modifier.padding(top = 50.dp)
-                )
-
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.padding(vertical = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
                 ) {
-                    Text(
-                        text = typedWord.ifEmpty { "" },
-                        fontSize = Dimensions.mediumFont,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-
-                    if (uiState.isLevelCompleted) {
-                        Text(
-                            text = "Level Completed!",
-                            fontSize = Dimensions.largeFont,
-                            fontWeight = FontWeight.Bold,
-                            color = FoundWordColor
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        StarsCount(count = 12)
+                        SettingsButton(
+                            onClick = { viewModel.loadLevel() }
                         )
                     }
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CrosswordView(
+                        uiState.crossword,
+                        modifier = Modifier.padding(horizontal = AppDimensions.gameScreenPadding)
+                    )
                 }
 
                 InputPanel(
                     inputLetters = uiState.inputLetters,
                     onWordCollect = { word ->
                         viewModel.submitWord(word.toList())
-                        typedWord = ""
                     },
-                    onLetterSelected = { letter -> typedWord += letter },
-                    modifier = Modifier.padding(bottom = 50.dp)
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
             }
 
-            NavigationButton(
-                isLevelCompleted = uiState.isLevelCompleted,
-                onRestartClick = { viewModel.loadLevel() },
-                onNextLevelClick = { viewModel.loadLevel() },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(Dimensions.screenPadding)
-            )
+//            NavigationButton(
+//                isLevelCompleted = uiState.isLevelCompleted,
+//                onRestartClick = { viewModel.loadLevel() },
+//                onNextLevelClick = { viewModel.loadLevel() },
+//                modifier = Modifier
+//                    .align(Alignment.BottomEnd)
+//                    .padding(Dimensions.screenPadding)
+//            )
         }
     }
 }

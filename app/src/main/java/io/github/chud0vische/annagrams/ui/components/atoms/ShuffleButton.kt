@@ -4,11 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import io.github.chud0vische.annagrams.ui.theme.ShuffleButtonColor
 import io.github.chud0vische.annagrams.ui.theme.modifiers.shuffleButtonIconStyle
 import io.github.chud0vische.annagrams.ui.theme.modifiers.shuffleButtonStyle
 
@@ -24,9 +26,9 @@ fun ShuffleButton(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            imageVector = Icons.Default.Refresh,
+            imageVector = Icons.Default.Shuffle,
             contentDescription = "Shuffle letters",
-            tint = Color.White.copy(alpha = 0.3f),
+            tint = Color.White.copy(alpha = 0.5f),
             modifier = Modifier.shuffleButtonIconStyle()
         )
     }
