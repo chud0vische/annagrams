@@ -26,28 +26,25 @@ class CrosswordRepository(
 
             val allWordsFromDB = wordsRepository.getAllWords()
 
-            val allPossibleSubWords = findSubwords(mainWord, allWordsFromDB) + mainWord
+            val allPossibleSubWords = findSubwords(mainWord, allWordsFromDB)
+            val sortedSubWords = allPossibleSubWords.sortedByDescending { it.length }
 
-            if (allPossibleSubWords.size < minWordsCount) {
+            val wordsForGeneration = sortedSubWords + listOf(mainWord)
+
+            if (wordsForGeneration.size < minWordsCount) {
                 Log.d("CrosswordGen", "Найдено мало подслов (${allPossibleSubWords}), пропускаем...")
                 continue
             }
 
             Log.d("CrosswordGen", "Подслова: $allPossibleSubWords, size: ${allPossibleSubWords.size}")
 
-            val wordsForCrossword = allPossibleSubWords.take(maxWordsCount).toSet()
-            Log.d("CrosswordGen", "Слова для кроссворда: $wordsForCrossword")
-
-
             // Crossword Generation
-            val generationResult = crosswordGenerator.generate(wordsForCrossword)
+            val generationResult = crosswordGenerator.generate(wordsForGeneration.toSet())
 
             if (generationResult != null) {
                 val (crossword, unplacedWords) = generationResult
 
-                val bonusWords = (unplacedWords + allPossibleSubWords.drop(maxWordsCount))
-                    .map { it.toList() }
-                    .toSet()
+                val bonusWords = unplacedWords.map { it.toList() }.toSet()
 
                 if (crossword.words.size >= minWordsCount) {
                     Log.d("CrosswordGen", "Генерация кроссворда прошла успешно")
@@ -71,16 +68,16 @@ class CrosswordRepository(
     private fun findSubwords(mainWord: String, dictionary: List<String>): Set<String> {
         val mainWordCharCount = mainWord.groupingBy { it }.eachCount()
 
-        return dictionary.filter { word ->
+        return dictionary.asSequence().filter { word ->
             if (word.length > mainWord.length || word.length < 3 || word == mainWord) {
-                return@filter false
-            }
+                false
+            } else {
+                val wordCharCount = word.groupingBy { it }.eachCount()
 
-            val wordCharCount = word.groupingBy { it }.eachCount()
-
-            wordCharCount.all { (char, count) ->
-                count <= mainWordCharCount.getOrDefault(char, 0)
+                wordCharCount.all { (char, count) ->
+                    count <= mainWordCharCount.getOrDefault(char, 0)
+                }
             }
-        }.shuffled().toSet()
+        }.toSet()
     }
 }
