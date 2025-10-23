@@ -1,10 +1,12 @@
 package io.github.chud0vische.annagrams.ui.components.molecules
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -30,19 +32,26 @@ fun InputButton(
     isSelected: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val animatedBackgroundColor by animateColorAsState(
+        targetValue = if (isSelected) InputButtonBackgroundColor else InputButtonBackgroundColor
+            .copy(alpha = 0f),
+        label = "BackgroundColorAnimation"
+    )
+
+    val animatedShadowColor by animateColorAsState(
+        targetValue = if (isSelected) BasicBlueColor else Color.White.copy(alpha = 0.05f),
+        label = "ShadowColorAnimation"
+    )
+
     BoxWithConstraints(
         modifier = modifier
             .background(
-                color = if (isSelected) {
-                    InputButtonBackgroundColor
-                } else {
-                    Color.Transparent
-                },
+                color = animatedBackgroundColor,
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
     ) {
-        val fontSize = minOf(maxWidth, maxHeight).value / 2f
+        val fontSize = minOf(maxWidth, maxHeight).value / 1.9f
 
         Text(
             text = letter.uppercase(),
@@ -51,10 +60,7 @@ fun InputButton(
             fontWeight = FontWeight.Bold,
             style = TextStyle(
                 shadow = Shadow(
-                    color = (
-                        if (!isSelected) Color.White.copy(alpha = 0.05f)
-                        else BasicBlueColor
-                    ),
+                    color = animatedShadowColor,
                     offset = Offset.Zero,
                     blurRadius = 20f
                 )

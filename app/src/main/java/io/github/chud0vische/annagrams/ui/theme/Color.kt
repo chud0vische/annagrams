@@ -32,7 +32,7 @@ val ButtonBackgroundColor = Color(0xFF272727)
 
 val CircularIndicatorColor = Color(0xFF7E8CDD)
 
-val InputButtonBackgroundColor = Color(0xFF464646)
+val InputButtonBackgroundColor = Color(0xFF343434)
 
 val InputPadBackgroundColor = Color(0xFF202020)
 

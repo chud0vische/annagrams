@@ -58,7 +58,7 @@ fun InputPad(
 
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val lineColor = InputButtonBackgroundColor
-                val lineStrokeWidth = 10f
+                val lineStrokeWidth = 15f
 
                 val positions = letterPositions.value
                 val indices = selectedIndices
