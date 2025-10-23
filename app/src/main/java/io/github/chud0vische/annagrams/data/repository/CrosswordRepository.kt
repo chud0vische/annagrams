@@ -21,7 +21,7 @@ class CrosswordRepository(
         val maxAttempt = 100
 
         for (attempt in 1..maxAttempt) {
-            val mainWord = wordsRepository.getRandomWordByLength(5) ?: continue
+            val mainWord = wordsRepository.getRandomWordByLength(wordLength) ?: continue
             Log.d("CrosswordGen", "Попытка: $attempt, Главное слово: '$mainWord'")
 
             val allWordsFromDB = wordsRepository.getAllWords()
@@ -29,7 +29,7 @@ class CrosswordRepository(
             val allPossibleSubWords = findSubwords(mainWord, allWordsFromDB) + mainWord
 
             if (allPossibleSubWords.size < minWordsCount) {
-                Log.d("CrosswordGen", "Найдено мало подслов (${allPossibleSubWords.size}), пропускаем...")
+                Log.d("CrosswordGen", "Найдено мало подслов (${allPossibleSubWords}), пропускаем...")
                 continue
             }
 
@@ -51,6 +51,7 @@ class CrosswordRepository(
 
                 if (crossword.words.size >= minWordsCount) {
                     Log.d("CrosswordGen", "Генерация кроссворда прошла успешно")
+                    Log.d("CrosswordGen", "Бонусные слова: $bonusWords")
                     return CrosswordGenerationResult(crossword, bonusWords, mainWord)
                 } else {
                     Log.d("CrosswordGen", "Генерация кроссворда не удалась")

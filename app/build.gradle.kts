@@ -56,7 +56,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
-    implementation(libs.material3)
     implementation("org.xerial:sqlite-jdbc:3.43.2.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

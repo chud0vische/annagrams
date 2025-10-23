@@ -30,7 +30,7 @@ class InputPanelState(
     var typedWord by mutableStateOf("")
         private set
 
-    val letterPositions = mutableStateMapOf<Int, Rect>()
+    val letterPositions = mutableStateOf<Map<Int, Rect>>(emptyMap())
     val selectedButtonIndices = mutableStateListOf<Int>()
     var currentDragPosition by mutableStateOf<Offset?>(null)
 
@@ -44,7 +44,7 @@ class InputPanelState(
     fun onDrag(dragPosition: Offset) {
         currentDragPosition = dragPosition
 
-        val indexUnderFinger = letterPositions.entries
+        val indexUnderFinger = letterPositions.value.entries
             .find { (_, rect) -> rect.contains(dragPosition) }
             ?.key
 

@@ -22,6 +22,9 @@ object AppDimensions {
     val gameScreenPadding = 32.dp
 
     val paddingSmall = 12.dp
+
+    val inputButtonSize = 48.dp
+
 }
 
 
@@ -30,7 +33,7 @@ object Dimensions {
     val mediumFont = 28.sp
     val smallFont = 20.sp
 
-    val keyboardSize = 320.dp
+    val keyboardSize = 450.dp
     val letterButtonSize = 80.dp
 
     val distanceBetweenLetters = 110

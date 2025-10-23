@@ -24,10 +24,10 @@ import io.github.chud0vische.annagrams.ui.theme.Dimensions
 
 @Composable
 fun InputPanel(
+    modifier: Modifier = Modifier,
     inputLetters: List<Char>,
     onWordCollect: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    keyBoardSize: Dp = Dimensions.keyboardSize
+    keyBoardSize: Dp = 300.dp
 ) {
     val state = rememberInputPanelState(onWordCollect)
 
@@ -40,7 +40,7 @@ fun InputPanel(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = state.typedWord.uppercase(),
+            text = state.typedWord,
             fontSize = Dimensions.mediumFont,
             fontWeight = FontWeight.Bold,
             color = Color.White,
@@ -61,9 +61,16 @@ fun InputPanel(
                 },
             contentAlignment = Alignment.Center
         ) {
-            Canvas(modifier = Modifier.fillMaxSize()) {
+            ShuffleButton(
+                { state.shuffleLetters() }
+            )
+
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
                 val points = state.selectedButtonIndices
-                    .mapNotNull { index -> state.letterPositions[index]?.center }
+                    .mapNotNull { index -> state.letterPositions.value[index]?.center }
                     .toMutableList()
 
                 state.currentDragPosition?.let {
@@ -85,11 +92,7 @@ fun InputPanel(
                 }
             }
 
-            ShuffleButton(
-                { state.shuffleLetters() }
-            )
-
-            InputPad(state.letters, state.letterPositions)
+            InputPad(state.letters, state.letterPositions, state.selectedButtonIndices)
         }
     }
 
