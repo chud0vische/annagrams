@@ -65,34 +65,12 @@ fun InputPanel(
                 { state.shuffleLetters() }
             )
 
-            Canvas(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                val points = state.selectedButtonIndices
-                    .mapNotNull { index -> state.letterPositions.value[index]?.center }
-                    .toMutableList()
-
-                state.currentDragPosition?.let {
-                    if (points.isNotEmpty()) {
-                        points.add(it)
-                    }
-                }
-
-                if (points.size > 1) {
-                    for (i in 0 until points.size -1) {
-                        drawLine(
-                            color = Color.White,
-                            start = points[i],
-                            end = points[i+1],
-                            strokeWidth = Dimensions.lineStrokeWidth,
-                            cap = StrokeCap.Round
-                        )
-                    }
-                }
-            }
-
-            InputPad(state.letters, state.letterPositions, state.selectedButtonIndices)
+            InputPad(
+                state.letters,
+                state.letterPositions,
+                state.selectedButtonIndices,
+                state.currentDragPosition
+            )
         }
     }
 
