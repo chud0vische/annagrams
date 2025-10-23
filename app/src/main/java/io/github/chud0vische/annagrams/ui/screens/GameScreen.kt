@@ -35,7 +35,6 @@ import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    var typedWord by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -88,34 +87,12 @@ fun GameScreen(viewModel: GameViewModel) {
                         .fillMaxWidth()
                 )
 
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                ) {
-                    Text(
-                        text = typedWord.ifEmpty { "" },
-                        fontSize = Dimensions.mediumFont,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-
-//                    if (uiState.isLevelCompleted) {
-//                        Text(
-//                            text = "Level Completed!",
-//                            fontSize = Dimensions.largeFont,
-//                            fontWeight = FontWeight.Bold,
-//                            color = FoundWordColor
-//                        )
-//                    }
-                }
-
                 InputPanel(
                     inputLetters = uiState.inputLetters,
                     onWordCollect = { word ->
                         viewModel.submitWord(word.toList())
-                        typedWord = ""
                     },
-                    onLetterSelected = { letter -> typedWord += letter },
+                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
 

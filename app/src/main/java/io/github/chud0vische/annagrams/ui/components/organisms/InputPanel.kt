@@ -3,124 +3,94 @@ package io.github.chud0vische.annagrams.ui.components.organisms
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.boundsInParent
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.chud0vische.annagrams.ui.components.atoms.InputButton
 import io.github.chud0vische.annagrams.ui.components.atoms.ShuffleButton
 import io.github.chud0vische.annagrams.ui.components.molecules.InputPad
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
-import kotlin.math.cos
-import kotlin.math.sin
 
 @Composable
 fun InputPanel(
     inputLetters: List<Char>,
     onWordCollect: (String) -> Unit,
-    onLetterSelected: (Char) -> Unit,
     modifier: Modifier = Modifier,
     keyBoardSize: Dp = Dimensions.keyboardSize
 ) {
-    var letters by remember(inputLetters) {
-        mutableStateOf(inputLetters.shuffled())
+    val state = rememberInputPanelState(onWordCollect)
+
+    LaunchedEffect(inputLetters) {
+        state.updateLetters(inputLetters)
     }
 
-    val letterPositions = remember(letters) { mutableStateMapOf<Int, Rect>() }
-    val selectedButtonIndices = remember { mutableStateListOf<Int>() }
-    var currentDragPosition by remember { mutableStateOf<Offset?>(Offset.Zero) }
-
-
-    Box(
-        modifier = modifier
-            .size(keyBoardSize)
-            .pointerInput(letters) {
-                detectDragGestures(
-                    onDragStart = {
-                        onWordCollect("")
-                        selectedButtonIndices.clear()
-                        currentDragPosition = it
-                    },
-                    onDragEnd = {
-                        if (selectedButtonIndices.isNotEmpty()) {
-                            val word = selectedButtonIndices.map { index -> letters[index] }
-                                .joinToString("")
-                            onWordCollect(word)
-                        }
-
-                        selectedButtonIndices.clear()
-                        currentDragPosition = null
-                    },
-                    onDragCancel = {
-                        onWordCollect("")
-                        selectedButtonIndices.clear()
-                        currentDragPosition = null
-                    },
-                    onDrag = { change, _ ->
-                        val position = change.position
-                        currentDragPosition = position
-
-                        val indexUnderFinger = letterPositions.entries
-                            .find { (_, rect) -> rect.contains(position) }
-                            ?.key
-
-                        if (indexUnderFinger != null && indexUnderFinger !in selectedButtonIndices) {
-                            selectedButtonIndices.add(indexUnderFinger)
-                            onLetterSelected(letters[indexUnderFinger])
-                        }
-                    }
-                )
-            },
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val points = selectedButtonIndices
-                .mapNotNull { index -> letterPositions[index]?.center }
-                .toMutableList()
-
-            currentDragPosition?.let {
-                if (points.isNotEmpty()) {
-                    points.add(it)
-                }
-            }
-
-            if (points.size > 1) {
-                for (i in 0 until points.size -1) {
-                    drawLine(
-                        color = Color.White,
-                        start = points[i],
-                        end = points[i+1],
-                        strokeWidth = Dimensions.lineStrokeWidth,
-                        cap = StrokeCap.Round
-                    )
-                }
-            }
-        }
-
-        ShuffleButton(
-            { letters = letters.shuffled() }
+        Text(
+            text = state.typedWord.uppercase(),
+            fontSize = Dimensions.mediumFont,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier
+                .height(Dimensions.mediumFont.value.dp * 2)
         )
 
-        InputPad(letters, letterPositions)
+        Box(
+            modifier = modifier
+                .size(keyBoardSize)
+                .pointerInput(state.letters) {
+                    detectDragGestures(
+                        onDragStart = { offset -> state.onDragStart(offset) },
+                        onDragEnd = { state.onDragEnd() },
+                        onDragCancel = { state.onDragCancel() },
+                        onDrag = { change, _ -> state.onDrag(change.position) }
+                    )
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val points = state.selectedButtonIndices
+                    .mapNotNull { index -> state.letterPositions[index]?.center }
+                    .toMutableList()
+
+                state.currentDragPosition?.let {
+                    if (points.isNotEmpty()) {
+                        points.add(it)
+                    }
+                }
+
+                if (points.size > 1) {
+                    for (i in 0 until points.size -1) {
+                        drawLine(
+                            color = Color.White,
+                            start = points[i],
+                            end = points[i+1],
+                            strokeWidth = Dimensions.lineStrokeWidth,
+                            cap = StrokeCap.Round
+                        )
+                    }
+                }
+            }
+
+            ShuffleButton(
+                { state.shuffleLetters() }
+            )
+
+            InputPad(state.letters, state.letterPositions)
+        }
     }
+
 }

@@ -35,8 +35,8 @@ fun CrosswordCellView(
     val innerShadowColor = colors.innerShadowColor(cell.type).value
     val shadowColor = colors.shadowColor(cell.type).value
 
-    val fontSize = (size.value / 2.2f).sp
-    val cornerRadius = (size.value / 6f).dp
+    val fontSize = (size.value / 1.8F).sp
+    val cornerRadius = (size.value / 6F).dp
     val cellShape = RoundedCornerShape(cornerRadius)
 
     val cellTextStyle = TextStyle(
