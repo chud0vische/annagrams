@@ -1,5 +1,6 @@
 package io.github.chud0vische.annagrams.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,18 +9,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.scale
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.chud0vische.annagrams.ui.components.atoms.SettingsButton
@@ -30,6 +32,7 @@ import io.github.chud0vische.annagrams.ui.theme.AppDimensions
 import io.github.chud0vische.annagrams.ui.theme.CircularIndicatorColor
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
 import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
+import io.github.chud0vische.annagrams.R
 
 
 @Composable
@@ -37,11 +40,41 @@ fun GameScreen(viewModel: GameViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
     Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.game_bg_blured),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .blur(radius = 100.dp),
+            contentScale = ContentScale.Fit
+        )
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.game_bg_blured),
+            contentDescription = null,
+            modifier = Modifier
+                .scale(1f, -1f)
+                .fillMaxWidth()
+                .blur(radius = 100.dp),
+            contentScale = ContentScale.Fit
+        )
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .safeDrawingPadding(),
         contentAlignment = Alignment.Center
     ) {
+
         if (uiState.isLoading) {
             CircularProgressIndicator(
                 color = CircularIndicatorColor
