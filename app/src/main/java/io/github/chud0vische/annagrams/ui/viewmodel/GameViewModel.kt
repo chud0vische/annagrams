@@ -1,13 +1,17 @@
 package io.github.chud0vische.annagrams.ui.viewmodel
 
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.chud0vische.annagrams.data.model.Crossword
+import io.github.chud0vische.annagrams.data.model.Star
+import io.github.chud0vische.annagrams.data.model.StarState
 import io.github.chud0vische.annagrams.data.repository.LevelRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 data class GameUiState(
     val crossword: Crossword,
@@ -16,7 +20,8 @@ data class GameUiState(
     val foundWords: Set<List<Char>> = emptySet(),
     val foundBonusWords: Set<List<Char>> = emptySet(),
     val isLevelCompleted: Boolean = false,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val stars: List<Star> = emptyList()
 )
 class GameViewModel(private val repository: LevelRepository): ViewModel() {
     private val _uiState = MutableStateFlow(
@@ -51,7 +56,8 @@ class GameViewModel(private val repository: LevelRepository): ViewModel() {
                         foundWords = emptySet(),
                         foundBonusWords = emptySet(),
                         isLevelCompleted = false,
-                        isLoading = false
+                        isLoading = false,
+                        stars = generateStars(crossword.words.size)
                     )
                 }
             } catch (e: Exception) {
@@ -82,15 +88,36 @@ class GameViewModel(private val repository: LevelRepository): ViewModel() {
                 // TODO: Показать анимацию "Бонусное слово"
                 isNewBonusWord -> {
                     val newFoundBonusWords = currentState.foundBonusWords + setOf(submittedWord)
-                    currentState.copy(foundBonusWords = newFoundBonusWords)
+
+                    val newStars = currentState.stars.toMutableList()
+                    val starToUpdateIndex = newStars.indexOfFirst { it.state == StarState.DEFAULT }
+
+                    if (starToUpdateIndex != -1) {
+                        val oldStar = newStars[starToUpdateIndex]
+                        newStars[starToUpdateIndex] = oldStar.copy(state = StarState.BONUS_REVEALED)
+                    }
+
+                    currentState.copy(
+                        foundBonusWords = newFoundBonusWords,
+                        stars = newStars.toList()
+                    )
                 }
 
                 // TODO: Анимация нахождения слова кроссворда
                 isNewCrosswordWord -> {
+                    val newStars = currentState.stars.toMutableList()
+                    val starToRevealIndex = newStars.indexOfFirst { it.state == StarState.DEFAULT }
+
+                    if (starToRevealIndex != -1) {
+                        val oldStar = newStars[starToRevealIndex]
+                        newStars[starToRevealIndex] = oldStar.copy(state = StarState.REVEALED)
+                    }
+
                     val newFoundCrosswordWords = currentState.foundWords + setOf(submittedWord)
 
                     currentState.copy(
                         crossword = currentState.crossword.revealWord(submittedWord),
+                        stars = newStars.toList(),
                         foundWords = newFoundCrosswordWords
                     )
                 }
@@ -108,5 +135,14 @@ class GameViewModel(private val repository: LevelRepository): ViewModel() {
         // TODO: Показать "Уровень пройден!"
         if (currentState.foundWords.size == currentState.crossword.words.size)
             _uiState.update { it.copy(isLevelCompleted = true) }
+    }
+
+    private fun generateStars(count: Int): List<Star> {
+        return List(count) {
+            Star(
+                id = it,
+                state = StarState.DEFAULT
+            )
+        }
     }
 }

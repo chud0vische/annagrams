@@ -33,6 +33,7 @@ import io.github.chud0vische.annagrams.ui.theme.CircularIndicatorColor
 import io.github.chud0vische.annagrams.ui.theme.Dimensions
 import io.github.chud0vische.annagrams.ui.viewmodel.GameViewModel
 import io.github.chud0vische.annagrams.R
+import io.github.chud0vische.annagrams.ui.components.organisms.StarryBackground
 
 
 @Composable
@@ -66,6 +67,10 @@ fun GameScreen(viewModel: GameViewModel) {
                 .blur(radius = 100.dp),
             contentScale = ContentScale.Fit
         )
+    }
+
+    if (!uiState.isLoading) {
+        StarryBackground(stars = uiState.stars)
     }
 
     Box(

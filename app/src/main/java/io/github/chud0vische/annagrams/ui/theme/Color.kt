@@ -41,6 +41,11 @@ val BasicBlueColor = Color(0xFF8590DE)
 
 val ShuffleButtonColor = Color(0xFF2D2D2D)
 
+val BGStarColor = Color(0xFFD8D8D8).copy(alpha = 0.7f)
+val BGStarRevealedColor = Color(0xFFC4B687).copy(alpha = 0.7f)
+val BGStarBonusRevealedColor = Color(0xFFA69FCE).copy(alpha = 0.7f)
+
+
 fun starGradient(height: Dp, width: Dp) = Brush.radialGradient(
     colors = listOf(Color(0xFFDABBE8), Color(0xFF3769D4)),
     center = Offset(height.toFloat() / 2F, width.toFloat() / 1F),
