@@ -6,7 +6,7 @@ class CrosswordGenerator(
     private val maxGridSize: Int = 15,
     private val emptyChar: Char = ' ',
 ) {
-    fun generate(words: Set<String>): Pair<Crossword, Set<String>>? {
+    fun generate(words: Set<String>): Pair<Crossword, Set<List<Char>>> ? {
         val sortedWords = words.sortedByDescending { it.length }
 
         if (sortedWords.isEmpty()) {
@@ -28,7 +28,7 @@ class CrosswordGenerator(
             placedWords
         )
 
-        val unplacedWord = mutableSetOf<String>()
+        val unplacedWord = mutableSetOf<List<Char>>()
 
         for (i in 1 until sortedWords.size) {
             val wordToPlace = sortedWords[i]
@@ -37,7 +37,7 @@ class CrosswordGenerator(
             if (bestFit != null) {
                 placeWordOnGrid(bestFit, grid, placedWords)
             } else {
-                unplacedWord.add(wordToPlace)
+                unplacedWord.add(wordToPlace.toList())
             }
         }
 
@@ -45,7 +45,7 @@ class CrosswordGenerator(
             return null
         }
 
-        return  normalizeGrid(placedWords) to unplacedWord
+        return  normalizeGrid(placedWords) to unplacedWord.toSet()
     }
 
     private fun placeWordOnGrid(
