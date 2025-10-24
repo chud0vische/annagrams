@@ -1,6 +1,7 @@
 package io.github.chud0vische.annagrams.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,14 +17,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.chrisbanes.haze.haze
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 import io.github.chud0vische.annagrams.ui.components.atoms.SettingsButton
 import io.github.chud0vische.annagrams.ui.components.molecules.StarsCount
 import io.github.chud0vische.annagrams.ui.components.organisms.CrosswordView
@@ -39,6 +45,7 @@ import io.github.chud0vische.annagrams.ui.components.organisms.StarryBackground
 @Composable
 fun GameScreen(viewModel: GameViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    val hazeState = rememberHazeState(blurEnabled = true)
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -70,7 +77,11 @@ fun GameScreen(viewModel: GameViewModel) {
     }
 
     if (!uiState.isLoading) {
-        StarryBackground(stars = uiState.stars)
+        Box(modifier = Modifier
+            .hazeSource(state = hazeState)
+        ) {
+            StarryBackground(stars = uiState.stars)
+        }
     }
 
     Box(
@@ -124,6 +135,7 @@ fun GameScreen(viewModel: GameViewModel) {
                 ) {
                     CrosswordView(
                         uiState.crossword,
+                        hazeState,
                         modifier = Modifier.padding(horizontal = AppDimensions.gameScreenPadding)
                     )
                 }

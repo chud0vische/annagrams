@@ -6,7 +6,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
 import io.github.chud0vische.annagrams.data.model.CrosswordCellType
-import io.github.chud0vische.annagrams.ui.theme.CellBorderColor
+import io.github.chud0vische.annagrams.ui.theme.CellHiddenBorderColor
+import io.github.chud0vische.annagrams.ui.theme.CellRevealedBorderColor
 import io.github.chud0vische.annagrams.ui.theme.CellHiddenColor
 import io.github.chud0vische.annagrams.ui.theme.CellHintedColor
 import io.github.chud0vische.annagrams.ui.theme.CellHintedTextColor
@@ -22,6 +23,7 @@ class CrosswordCellColors internal constructor(
     private val hintedBackgroundColor: Color,
     private val revealedBackgroundColor: Color,
     private val revealedBorderColor: Color,
+    private val hiddenBorderColor: Color,
     private val emptyBorderColor: Color,
     private val hintedContentColor: Color,
     private val revealedContentColor: Color,
@@ -42,6 +44,7 @@ class CrosswordCellColors internal constructor(
     internal fun borderColor(type: CrosswordCellType): State<Color> {
         val color = when (type) {
             CrosswordCellType.REVEALED -> revealedBorderColor
+            CrosswordCellType.HIDDEN -> hiddenBorderColor
             else -> emptyBorderColor
         }
         return rememberUpdatedState(color)
@@ -85,8 +88,9 @@ object CrosswordCellDefaults {
         hiddenBackgroundColor: Color = CellHiddenColor,
         hintedBackgroundColor: Color = CellHintedColor,
         revealedBackgroundColor: Color = CellRevealedColor,
-        revealedBorderColor: Color = CellBorderColor,
+        revealedBorderColor: Color = CellRevealedBorderColor,
         emptyBorderColor: Color = Color.Transparent,
+        hiddenBorderColor: Color = CellHiddenBorderColor,
         hintedContentColor: Color = CellHintedTextColor,
         revealedContentColor: Color = CellRevealedTextColor,
         emptyContentColor: Color = Color.Transparent,
@@ -96,6 +100,7 @@ object CrosswordCellDefaults {
         hintedBackgroundColor = hintedBackgroundColor,
         revealedBackgroundColor = revealedBackgroundColor,
         revealedBorderColor = revealedBorderColor,
+        hiddenBorderColor = hiddenBorderColor,
         emptyBorderColor = emptyBorderColor,
         hintedContentColor = hintedContentColor,
         revealedContentColor = revealedContentColor,

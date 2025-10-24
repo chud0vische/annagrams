@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.innerShadow
 import androidx.compose.ui.text.TextStyle
@@ -22,6 +23,10 @@ import io.github.chud0vische.annagrams.data.model.CrosswordCellType
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
 import io.github.chud0vische.annagrams.ui.theme.starGradient
 import androidx.compose.ui.graphics.shadow.Shadow
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
 import io.github.chud0vische.annagrams.ui.theme.AppFontFamily
 import io.github.chud0vische.annagrams.ui.theme.AppTypography
 
@@ -29,6 +34,7 @@ import io.github.chud0vische.annagrams.ui.theme.AppTypography
 fun CrosswordCellView(
     cell: CrosswordCell,
     size: Dp,
+    hazeState: HazeState,
     modifier: Modifier = Modifier,
     colors: CrosswordCellColors = CrosswordCellDefaults.colors()
 ) {
@@ -47,10 +53,11 @@ fun CrosswordCellView(
         fontWeight = FontWeight.Bold
     )
 
+    var cellModifier = modifier
+        .requiredSize(size)
 
-    Box(
-        modifier = modifier
-            .requiredSize(size)
+    if (cell.type != CrosswordCellType.EMPTY) {
+        cellModifier = cellModifier
             .dropShadow(
                 cellShape,
                 Shadow(
@@ -58,22 +65,22 @@ fun CrosswordCellView(
                     color = shadowColor
                 )
             )
-            .background(
-                backgroundColor,
-                cellShape
-            )
-            .innerShadow(
-                cellShape,
-                Shadow(
-                    radius = cornerRadius,
-                    color = innerShadowColor
+            .clip(cellShape)
+            .hazeEffect(
+                state = hazeState,
+                style = HazeStyle(
+                    blurRadius = 10.dp,
+                    noiseFactor = 0.05f,
+                    backgroundColor = backgroundColor,
+                    tint = HazeTint.Unspecified
                 )
             )
-            .border(
-                AppDimensions.cellBorderSize,
-                borderColor,
-                cellShape
-            ),
+            .border(AppDimensions.cellBorderSize, borderColor, cellShape)
+    }
+
+
+    Box(
+        modifier = cellModifier,
         contentAlignment = Alignment.Center,
     ) {
         if (cell.type == CrosswordCellType.HINTED || cell.type == CrosswordCellType.REVEALED) {

@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import dev.chrisbanes.haze.HazeState
 import io.github.chud0vische.annagrams.data.model.Crossword
 import io.github.chud0vische.annagrams.ui.components.atoms.CrosswordCellView
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
@@ -21,6 +22,7 @@ import kotlin.math.min
 @Composable
 fun CrosswordView(
     crossword: Crossword,
+    hazeState: HazeState,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -60,6 +62,7 @@ fun CrosswordView(
                                     CrosswordCellView(
                                         cell = cell,
                                         size = finalCellSizeDp,
+                                        hazeState = hazeState,
                                         modifier = Modifier
                                             .padding(AppDimensions.cellMargin)
                                             .requiredSize(finalCellSizeDp)
