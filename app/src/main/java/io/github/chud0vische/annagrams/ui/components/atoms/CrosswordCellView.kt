@@ -22,6 +22,8 @@ import io.github.chud0vische.annagrams.data.model.CrosswordCellType
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
 import io.github.chud0vische.annagrams.ui.theme.starGradient
 import androidx.compose.ui.graphics.shadow.Shadow
+import io.github.chud0vische.annagrams.ui.theme.AppFontFamily
+import io.github.chud0vische.annagrams.ui.theme.AppTypography
 
 @Composable
 fun CrosswordCellView(
@@ -78,6 +80,7 @@ fun CrosswordCellView(
             Text(
                 text = cell.char.toString().uppercase(),
                 color = textColor,
+                fontFamily = AppFontFamily,
                 style = cellTextStyle,
                 fontSize = fontSize,
             )

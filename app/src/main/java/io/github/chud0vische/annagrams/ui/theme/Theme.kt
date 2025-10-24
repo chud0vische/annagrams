@@ -34,6 +34,7 @@ fun AnnagramsTheme(
     }
 
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as ComponentActivity).window
@@ -43,7 +44,8 @@ fun AnnagramsTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+        typography = AppTypography,
+    ) {
+        content()
+    }
 }

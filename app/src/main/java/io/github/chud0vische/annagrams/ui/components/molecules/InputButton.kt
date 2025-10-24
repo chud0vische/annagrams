@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import io.github.chud0vische.annagrams.ui.theme.AppFontFamily
 import io.github.chud0vische.annagrams.ui.theme.BasicBlueColor
 import io.github.chud0vische.annagrams.ui.theme.InputButtonBackgroundColor
 
@@ -50,6 +51,7 @@ fun InputButton(
             fontSize = fontSize.sp,
             color = Color.White.copy(alpha = 0.85f),
             fontWeight = FontWeight.Bold,
+            fontFamily = AppFontFamily,
             style = TextStyle(
                 shadow = Shadow(
                     color = animatedShadowColor,
