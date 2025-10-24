@@ -47,7 +47,11 @@ class GameViewModel(private val repository: LevelRepository): ViewModel() {
                     currentState.copy(
                         crossword,
                         bonusWordsPool,
-                        inputLetters
+                        inputLetters,
+                        foundWords = emptySet(),
+                        foundBonusWords = emptySet(),
+                        isLevelCompleted = false,
+                        isLoading = false
                     )
                 }
             } catch (e: Exception) {
