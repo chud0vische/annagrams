@@ -3,6 +3,7 @@ package io.github.chud0vische.annagrams.ui.components.atoms
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -11,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.innerShadow
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -21,6 +21,7 @@ import io.github.chud0vische.annagrams.data.model.CrosswordCell
 import io.github.chud0vische.annagrams.data.model.CrosswordCellType
 import io.github.chud0vische.annagrams.ui.theme.AppDimensions
 import io.github.chud0vische.annagrams.ui.theme.starGradient
+import androidx.compose.ui.graphics.shadow.Shadow
 
 @Composable
 fun CrosswordCellView(
@@ -47,7 +48,7 @@ fun CrosswordCellView(
 
     Box(
         modifier = modifier
-            .size(size)
+            .requiredSize(size)
             .dropShadow(
                 cellShape,
                 Shadow(

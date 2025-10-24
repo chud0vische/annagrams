@@ -59,22 +59,14 @@ fun GameScreen(viewModel: GameViewModel) {
         else if (!uiState.isLoading && !uiState.crossword.words.isEmpty()) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = 0.dp,
-                        start = AppDimensions.gameScreenPadding,
-                        end = AppDimensions.gameScreenPadding,
-                        bottom = AppDimensions.gameScreenPadding
-                    ),
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            vertical = 24.dp
-                        )
+                        .padding(24.dp)
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -86,19 +78,24 @@ fun GameScreen(viewModel: GameViewModel) {
                         )
                     }
                 }
-
-                CrosswordView(
-                    uiState.crossword,
+                Box(
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxWidth()
-                )
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CrosswordView(
+                        uiState.crossword,
+                        modifier = Modifier.padding(horizontal = AppDimensions.gameScreenPadding)
+                    )
+                }
 
                 InputPanel(
                     inputLetters = uiState.inputLetters,
                     onWordCollect = { word ->
                         viewModel.submitWord(word.toList())
-                    }
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
             }
 
